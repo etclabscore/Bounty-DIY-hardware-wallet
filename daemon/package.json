@@ -1,0 +1,17 @@
+{
+  "name": "signatory-hardware-wallet-daemon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/test.js",
+  "scripts": {
+    "test": "src/test.js"
+  },
+  "author": "vb <vbstreetz@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@etclabscore/signatory": "^1.0.6"
+  },
+  "devDependencies": {
+    "@open-rpc/client-js": "^1.2.4"
+  }
+}
