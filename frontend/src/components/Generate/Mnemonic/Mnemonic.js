@@ -1,92 +1,112 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, TextField } from '@material-ui/core';
+import { Button, Badge } from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import sl from 'utils/sl';
+import rpc from 'utils/xhr';
 
 const useStyles = makeStyles(theme => ({
   container: {},
-  row: {
+  heading: {},
+  grid: {
     marginBottom: 20,
     width: '100%',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
   },
-  heading: {
-    marginBottom: 30,
+  gridItem: {
+    margin: 10,
+    width: 200,
+  },
+  gridItemButton: {
+    width: 200,
   },
 }));
 
-function Component({ importMnemonic }) {
+function Component({ mnemonic = [], updateWallet, importMnemonic }) {
   const classes = useStyles();
 
-  const onSubmit = async e => {
-    e.preventDefault();
-
-    const mnemonic = (e.target.mnemonic.value ?? '').trim();
-    const passphrase = (e.target.passphrase.value ?? '').trim();
-
-    if (!mnemonic) {
-      return sl('error', 'Please enter the mnemonic phrase...');
-    }
-
-    try {
-      await importMnemonic(mnemonic, passphrase);
-    } catch (e) {
-      sl('error', e.message);
-    }
+  const onMount = async() => {
+    const m = (await rpc('generateMnemonic'))
+      .split(' ')
+      .map((word, index) => ({ word, index }));
+    updateWallet({
+      mnemonic: m,
+      shuffledMnemonic: _.shuffle(m),
+    });
   };
 
+  React.useEffect(() => {
+    onMount(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <form
-      {...{ onSubmit }}
+    <div
       className={clsx(
         classes.container,
         'flex flex--column flex--align-center flex--grow'
       )}
     >
-      <h1 className={classes.heading}>Unlock your Mnemonic Phrase</h1>
+      <h1 className={classes.heading}>Generate a Mnemonic Phrase</h1>
 
-      <div className={classes.row}>
-        <TextField
-          id="mnemonic"
-          label="Mnemonic"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          placeholder={'jelly practice ...'}
-          fullWidth
-          multiline
-          rows="3"
-        />
+      <p className="center-align">
+        Write these words down. Do not copy them to your clipboard, or save them
+        anywhere online.
+      </p>
+
+      <div className={'flex flex--justify-center'}>
+        <div className={classes.grid}>
+          {mnemonic.map(({ word, index }) => {
+            return (
+              <div className={classes.gridItem} key={word}>
+                <Badge badgeContent={index + 1} color="primary">
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    color="secondary"
+                    className={clsx(classes.gridItemButton)}
+                  >
+                    {word}
+                  </Button>
+                </Badge>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className={classes.row}>
-        <TextField
-          id="passphrase"
-          label="Passphrase"
-          type="password"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          placeholder={'(Optional)'}
-          fullWidth
-        />
-      </div>
-
-      <div className={clsx('flex flex--align-center')}>
+      <div className={'flex flex--align-center'}>
         <Button variant="outlined" fullWidth to={'/import'} component={Link}>
           Cancel
         </Button>
         &nbsp; &nbsp;
-        <Button type="submit" variant="contained" fullWidth color="secondary">
-          Generate
+        <Button
+          variant="outlined"
+          fullWidth
+          color="secondary"
+          onClick={onMount}
+        >
+          Regenerate
+        </Button>
+        &nbsp; &nbsp;
+        <Button
+          variant="contained"
+          fullWidth
+          color="secondary"
+          to="/generate/mnemonic/confirm"
+          component={Link}
+        >
+          Confirm
         </Button>
       </div>
-    </form>
+    </div>
   );
 }
 
-export default connect(() => ({}), mapDispatchToProps)(Component);
+export default connect(
+  ({ wallet: { mnemonic } }) => ({ mnemonic }),
+  mapDispatchToProps
+)(Component);

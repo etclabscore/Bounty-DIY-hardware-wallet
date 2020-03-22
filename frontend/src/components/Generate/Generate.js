@@ -9,6 +9,7 @@ import Landing from './Landing';
 import Keystore from './Keystore/Keystore';
 import SaveKeystore from './Keystore/Save';
 import Mnemonic from './Mnemonic/Mnemonic';
+import ConfirmMnemonic from './Mnemonic/Confirm';
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -32,6 +33,11 @@ function Component({ account }) {
             component={SaveKeystore}
           />
           <Route exact path={'/generate/keystore'} component={Keystore} />
+          <Route
+            exact
+            path={'/generate/mnemonic/confirm'}
+            component={ConfirmMnemonic}
+          />
           <Route exact path={'/generate/mnemonic'} component={Mnemonic} />
           <Route path={'/'} component={Landing} />
         </Switch>

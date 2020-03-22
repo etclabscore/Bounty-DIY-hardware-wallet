@@ -6,6 +6,7 @@ import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import sl from 'utils/sl';
+import rpc from 'utils/xhr';
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({ generateKeystorage, history }) {
+function Component({ history }) {
   const classes = useStyles();
 
   const onSubmit = async e => {
@@ -33,7 +34,11 @@ function Component({ generateKeystorage, history }) {
       return sl('error', 'Passwords do not match.');
 
     try {
-      const account = await generateKeystorage(passphrase);
+      const account = await rpc('createAccount', {
+        name: Date.now().toString(),
+        description: Date.now().toString(),
+        passphrase,
+      });
       history.push(`/generate/keystore/save/${account}`);
     } catch (e) {
       sl('error', e.message);

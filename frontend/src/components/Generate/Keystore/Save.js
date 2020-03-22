@@ -5,10 +5,9 @@ import { Button } from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { LOGIC_TYPES_KEYFILE } from 'config';
-import cache from 'utils/cache';
 import download from 'utils/download';
 import rpc from 'utils/xhr';
+import sl from 'utils/sl';
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -26,6 +25,7 @@ function Component({
     params: { account },
   },
   updateWallet,
+  history,
 }) {
   const classes = useStyles();
   const [downloaded, setDownloaded] = React.useState(false);
@@ -38,19 +38,9 @@ function Component({
       download('text/plain', keystore, 'keyfile');
       setDownloaded(true);
     } else {
-      const accounts = [account];
-
-      cache('login_type', LOGIC_TYPES_KEYFILE);
-      cache('wallet', null);
-      cache('account', account);
-      cache('accounts', accounts);
-
-      updateWallet({
-        type: LOGIC_TYPES_KEYFILE,
-        wallet: null,
-        account,
-        accounts,
-      });
+      sl('success', 'You can now import your keyfile', 'Success', () =>
+        history.push('/import/keystore')
+      );
     }
   };
 

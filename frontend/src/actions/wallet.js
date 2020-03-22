@@ -132,32 +132,3 @@ export function importKeyfile() {
     });
   };
 }
-
-export function generateKeystorage(passphrase) {
-  return async(dispatch, getState) => {
-    const account = await rpc('createAccount', {
-      name: Date.now().toString(),
-      description: Date.now().toString(),
-      passphrase,
-    });
-
-    cache('login_type', LOGIC_TYPES_KEYFILE);
-    cache('wallet', null);
-    cache('account', null);
-    cache('passphrase', passphrase);
-    cache('accounts', []);
-
-    dispatch({
-      type: ACTION_TYPE_UPDATE_WALLET,
-      payload: {
-        type: LOGIC_TYPES_KEYFILE,
-        account: null,
-        wallet: null,
-        passphrase,
-        accounts: [],
-      },
-    });
-
-    return account;
-  };
-}
