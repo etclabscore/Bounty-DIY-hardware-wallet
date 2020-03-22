@@ -26,7 +26,53 @@ export function chooseAccount(account) {
     const {
       wallet: { accounts },
     } = getState();
-    cache('current_account_index', accounts.indexOf(account));
-    cache('no_of_accounts', accounts.length);
+    cache('account', account);
+    cache('accounts', accounts);
   };
 }
+
+export function logout() {
+  return async(dispatch, getState) => {
+    ['wallet', 'passphrase', 'accounts', 'account'].forEach(k =>
+      cache(k, null)
+    );
+    dispatch({
+      type: ACTION_TYPE_UPDATE_WALLET,
+      payload: {
+        account: null,
+        wallet: null,
+        passphrase: null,
+        accounts: [],
+      },
+    });
+  };
+}
+
+export function login(wallet, passphrase) {
+  return async(dispatch, getState) => {
+    const account = await rpc('getAccountFromMnemonic', {
+      uuid: wallet,
+      passphrase,
+      index: 0,
+    });
+    const accounts = [account];
+
+    cache('wallet', wallet);
+    cache('account', account);
+    cache('passphrase', passphrase);
+    cache('accounts', accounts);
+
+    dispatch({
+      type: ACTION_TYPE_UPDATE_WALLET,
+      payload: {
+        account,
+        wallet,
+        passphrase,
+        accounts,
+      },
+    });
+  };
+}
+
+// store.dispatch(login('aebe0eaf-8cdb-4f0f-9e82-d0a52412d264', 'passphrase8'));
+window.login = login;

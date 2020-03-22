@@ -19,3 +19,5 @@ export default function cache(k, v) {
       return;
   }
 }
+
+window.cache = cache;

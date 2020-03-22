@@ -17,6 +17,7 @@ import LightIcon from '@material-ui/icons/Brightness7';
 import DarkIcon from '@material-ui/icons/Brightness4';
 import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
 import { isDarkSelector } from 'selectors/theme';
 
 function Component({
@@ -26,6 +27,7 @@ function Component({
   accounts,
   addAccount,
   chooseAccount,
+  logout,
 }) {
   const [accountMenuAnchorEl, setAaccountMenuAnchorEl] = React.useState(null);
 
@@ -87,6 +89,10 @@ function Component({
               <Divider />
               <MenuItem onClick={handleAddAccount}>
                 <AddIcon /> Add Account
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={logout}>
+                <LogoutIcon /> Logout
               </MenuItem>
             </Menu>
           </React.Fragment>
