@@ -38,7 +38,7 @@ require('dotenv').config();
   const accounts = await client.request('listAccounts', []);
   assert(accounts.find(account => account.address === createdAccountAddress));
 
-  const chainId = 6;
+  const chainId = 1;
 
   const message = 'ETC rules! 🥳🎉';
   const messageHex = stringToHex(message);

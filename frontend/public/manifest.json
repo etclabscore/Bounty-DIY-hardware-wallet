@@ -1,6 +1,6 @@
 {
-  "name": "Signatory Hardware Wallet",
-  "description": "Signatory Hardware Wallet",
+  "name": "Signatory Wallet Manager",
+  "description": "Signatory Wallet Manager",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,8 +1,10 @@
 import { ACTION_TYPE_UPDATE_WALLET } from 'config';
 
 const DEFAULT_STATE = {
-  isLoaded: false,
+  wallet: null,
   account: null,
+  passphrase: null,
+  accounts: [],
 };
 
 export default (state = DEFAULT_STATE, action) => {
