@@ -6,7 +6,6 @@ import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import download from 'utils/download';
-import rpc from 'utils/xhr';
 import sl from 'utils/sl';
 
 const useStyles = makeStyles(theme => ({
@@ -26,6 +25,7 @@ function Component({
   },
   updateWallet,
   history,
+  rpc,
 }) {
   const classes = useStyles();
   const [downloaded, setDownloaded] = React.useState(false);

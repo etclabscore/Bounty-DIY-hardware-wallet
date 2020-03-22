@@ -6,7 +6,6 @@ import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import sl from 'utils/sl';
-import rpc from 'utils/xhr';
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -19,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({ history }) {
+function Component({ history, rpc }) {
   const classes = useStyles();
 
   const onSubmit = async e => {

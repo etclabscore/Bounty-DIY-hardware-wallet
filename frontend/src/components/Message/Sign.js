@@ -4,7 +4,6 @@ import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Paper } from '@material-ui/core';
 import { stringToHex, numberToHex } from '@etclabscore/eserialize';
-import { rpc } from 'utils/xhr';
 import sl from 'utils/sl';
 
 const useStyles = makeStyles(theme => ({
@@ -14,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Component = ({ account, passphrase }) => {
+const Component = ({ account, passphrase, rpc }) => {
   const classes = useStyles();
   const [messageSignature, setMessageSignature] = React.useState(null);
 

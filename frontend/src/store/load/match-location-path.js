@@ -1,4 +1,3 @@
-// import xhr from 'utils/xhr';
 // import { getMatchedUrl } from 'utils/location';
 
 export default Base =>

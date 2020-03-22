@@ -1,6 +1,5 @@
 import Promise from 'bluebird';
 import filePicker from 'component-file-picker';
-import rpc from 'utils/xhr';
 import cache from 'utils/cache';
 import {
   ACTION_TYPE_UPDATE_WALLET,
@@ -8,6 +7,7 @@ import {
   LOGIC_TYPES_MNEMONIC,
 } from 'config';
 import { history } from 'store';
+import { rpc } from './xhr';
 
 export function updateWallet(payload) {
   return { type: ACTION_TYPE_UPDATE_WALLET, payload };
@@ -18,11 +18,13 @@ export function addAccount() {
     const {
       wallet: { accounts, passphrase, wallet },
     } = getState();
-    const account = await rpc('getAccountFromMnemonic', {
-      uuid: wallet,
-      passphrase,
-      index: accounts.length,
-    });
+    const account = await dispatch(
+      rpc('getAccountFromMnemonic', {
+        uuid: wallet,
+        passphrase,
+        index: accounts.length,
+      })
+    );
     dispatch({
       type: ACTION_TYPE_UPDATE_WALLET,
       payload: { accounts: accounts.concat(account) },
@@ -62,18 +64,22 @@ export function logout() {
 
 export function importMnemonic(mnemonic, passphrase) {
   return async(dispatch, getState) => {
-    const wallet = await rpc('importMnemonic', {
-      name: 'Default',
-      passphrase,
-      mnemonic,
-      hdPath: "m/44'/61'/0'/0", // eslint-disable-line quotes
-    });
+    const wallet = await dispatch(
+      rpc('importMnemonic', {
+        name: 'Default',
+        passphrase,
+        mnemonic,
+        hdPath: "m/44'/61'/0'/0", // eslint-disable-line quotes
+      })
+    );
 
-    const account = await rpc('getAccountFromMnemonic', {
-      uuid: wallet,
-      passphrase,
-      index: 0,
-    });
+    const account = await dispatch(
+      rpc('getAccountFromMnemonic', {
+        uuid: wallet,
+        passphrase,
+        index: 0,
+      })
+    );
     const accounts = [account];
 
     cache('login_type', LOGIC_TYPES_MNEMONIC);
@@ -97,7 +103,7 @@ export function importMnemonic(mnemonic, passphrase) {
 
 export function importKeystorage(keyfile, passphrase) {
   return async(dispatch, getState) => {
-    const account = await rpc('importKeyfile', passphrase, keyfile);
+    const account = await dispatch(rpc('importKeyfile', passphrase, keyfile));
     const accounts = [account];
 
     cache('login_type', LOGIC_TYPES_KEYFILE);

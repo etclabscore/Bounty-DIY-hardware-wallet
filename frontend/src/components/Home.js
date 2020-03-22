@@ -7,6 +7,7 @@ import Message from './Message/Message';
 import Import from './Import/Import';
 import Generate from './Generate/Generate';
 import Landing from './Landing';
+import Settings from './Settings';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,6 +22,7 @@ function Component({ account }) {
     <div className={classes.container}>
       <Switch>
         <Route path={'/message'} component={Message} />
+        <Route path={'/settings'} component={Settings} />
         <Route path={'/'} render={() => <Landing to="/message" />} />
       </Switch>
     </div>
@@ -28,6 +30,7 @@ function Component({ account }) {
     <Switch>
       <Route path={'/generate'} component={Generate} />
       <Route path={'/import'} component={Import} />
+      <Route path={'/settings'} component={Settings} />
       <Route path={'/'} render={() => <Landing to="/import" />} />
     </Switch>
   );

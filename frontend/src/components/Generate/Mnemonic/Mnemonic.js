@@ -6,7 +6,6 @@ import { Button, Badge } from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import rpc from 'utils/xhr';
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -26,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({ mnemonic = [], updateWallet, importMnemonic }) {
+function Component({ mnemonic = [], updateWallet, importMnemonic, rpc }) {
   const classes = useStyles();
 
   const onMount = async() => {

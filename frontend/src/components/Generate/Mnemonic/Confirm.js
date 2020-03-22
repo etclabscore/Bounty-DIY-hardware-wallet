@@ -51,7 +51,7 @@ function Component({
   const [wordState, setWordState] = React.useState({});
   const inputMnemonicIsValid = inputMnemonic.length === mnemonic.length;
 
-  const updateWordState = async({ state, index }) => {
+  const hintWord = async({ state, index }) => {
     setWordState({ index, state });
     await sleep(300);
     setWordState({});
@@ -59,13 +59,13 @@ function Component({
 
   const onClickWord = async({ index, word }) => {
     if (index !== inputMnemonic.length) {
-      return await updateWordState({ index, state: 'buttonError' });
+      return await hintWord({ index, state: 'buttonError' });
     }
     setInputMnemonic(inputMnemonic.concat(word));
   };
 
   const onRevealNextWord = async() => {
-    await updateWordState({
+    await hintWord({
       index: inputMnemonic.length,
       state: 'buttonHighlight',
     });

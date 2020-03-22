@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as mapDispatchToProps from 'actions';
+import { Link } from 'react-router-dom';
 import {
   IconButton,
   Tooltip,
@@ -18,6 +19,7 @@ import DarkIcon from '@material-ui/icons/Brightness4';
 import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { isDarkSelector } from 'selectors/theme';
 import { LOGIC_TYPES_MNEMONIC } from 'config';
 
@@ -90,23 +92,41 @@ function Component({
               {isMnemonicType ? null : <Divider />}
               {accounts.map(a => (
                 <MenuItem onClick={() => handleChooseAccount(a)} key={a}>
-                  {a} {a !== account ? null : <CheckIcon />}
+                  {a}&nbsp;&nbsp;{a !== account ? null : <CheckIcon />}
                 </MenuItem>
               ))}
               {isMnemonicType !== LOGIC_TYPES_MNEMONIC ? null : <Divider />}
               {isMnemonicType ? null : (
                 <MenuItem onClick={handleAddAccount}>
-                  <AddIcon /> Add Account
+                  <AddIcon />
+                  &nbsp;&nbsp;Add Account
                 </MenuItem>
               )}
 
               <Divider />
+              {/*
+                <MenuItem to={'/settings'} component={Link}>
+                  <SettingsIcon />
+                  &nbsp;&nbsp;Settings
+                </MenuItem>
+              */}
               <MenuItem onClick={handleLogout}>
-                <LogoutIcon /> Logout
+                <LogoutIcon />
+                &nbsp;&nbsp;Logout
               </MenuItem>
             </Menu>
           </React.Fragment>
         )}
+        <Tooltip title="Settings">
+          <IconButton
+            color="inherit"
+            aria-label="Settings"
+            to={'/settings'}
+            component={Link}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
         <Tooltip title="Toggle light/dark theme">
           <IconButton
             onClick={toggleTheme}
