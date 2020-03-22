@@ -9,19 +9,18 @@ import { SECONDARY_COLOR } from 'config';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    width: '100%',
+    position: 'relative',
+  },
+  loader: {
+    position: 'absolute',
+    top: '50%',
   },
   heading: {
     marginBottom: 50,
-    width: '100%',
-    textAlign: 'center',
   },
   section: {
     marginLeft: 10,
     marginRight: 10,
-  },
-  button: {
-    width: 200,
   },
   toGenerateLink: {
     marginTop: 50,
@@ -31,21 +30,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component() {
+function Component({ account, isWorking }) {
   const classes = useStyles();
 
   return (
-    <div
-      className={clsx(
-        classes.container,
-        'flex flex flex--column flex--justify-center flex--align-center flex--grow'
-      )}
-    >
-      <h1
-        className={clsx(classes.heading, 'flex flex-justify-center flex--grow')}
-      >
-        How would you like to access your wallet?
-      </h1>
+    <div className="flex flex--column flex--justify-center flex--align-center">
+      <h1 className={classes.heading}>Create New Wallet</h1>
 
       <div className="flex flex--justify-center">
         <div
@@ -54,15 +44,24 @@ function Component() {
             'flex flex--column flex--align-center'
           )}
         >
+          <h3>Keystore File</h3>
+
+          <ul>
+            <li>An encrypted JSON file, protected by a password</li>
+            <li>Back it up on a USB drive</li>
+            <li>Cannot be written, printed, or easily transferred to mobile</li>
+            <li>Compatible with Mist, Parity, Geth</li>
+            <li>Provides a single address for sending and receiving</li>
+          </ul>
+
           <Button
             variant="contained"
             fullWidth
             color="secondary"
-            to={'/import/keystore'}
+            to={'/generate/keystore'}
             component={Link}
-            className={classes.button}
           >
-            Keystore File
+            Generate a Keystore File
           </Button>
         </div>
 
@@ -72,24 +71,39 @@ function Component() {
             'flex flex--column flex--align-center'
           )}
         >
+          <h3>Mnemonic Phrase</h3>
+
+          <ul>
+            <li>A 12-word private seed phrase</li>
+            <li>Back it up on paper or USB drive</li>
+            <li>Can be written, printed, and easily typed on mobile, too</li>
+            <li>Compatible with MetaMask, Jaxx, imToken, and more</li>
+            <li>Provides unlimited addresses for sending and receiving</li>
+          </ul>
+
           <Button
             variant="contained"
             fullWidth
             color="secondary"
-            to={'/import/mnemonic'}
+            to={'/generate/mnemonic'}
             component={Link}
-            className={classes.button}
           >
-            Mnemonic Phrase
+            Generate a Mnemonic Phrase
           </Button>
         </div>
       </div>
 
       <div className={classes.toGenerateLink}>
-        <Link to="/generate">Don’t have a wallet?</Link>
+        <Link to="/import">Got a wallet?</Link>
       </div>
     </div>
   );
 }
 
-export default connect(() => ({}), mapDispatchToProps)(Component);
+export default connect(
+  ({ app: { isWorking }, wallet: { account } }) => ({
+    isWorking,
+    account,
+  }),
+  mapDispatchToProps
+)(Component);

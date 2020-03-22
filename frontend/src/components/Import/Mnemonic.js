@@ -82,7 +82,7 @@ function Component({ importMnemonic }) {
         </Button>
         &nbsp; &nbsp;
         <Button type="submit" variant="contained" fullWidth color="secondary">
-          Generate
+          Import
         </Button>
       </div>
     </form>

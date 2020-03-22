@@ -77,7 +77,7 @@ function Component({ importKeyfile, importKeystorage }) {
         </Button>
         &nbsp; &nbsp;
         <Button type="submit" variant="contained" fullWidth color="secondary">
-          Generate
+          Import
         </Button>
       </div>
     </form>
