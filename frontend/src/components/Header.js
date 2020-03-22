@@ -19,6 +19,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 import { isDarkSelector } from 'selectors/theme';
+import { LOGIC_TYPES_MNEMONIC } from 'config';
 
 function Component({
   toggleTheme,
@@ -28,6 +29,7 @@ function Component({
   addAccount,
   chooseAccount,
   logout,
+  isMnemonicType,
 }) {
   const [accountMenuAnchorEl, setAaccountMenuAnchorEl] = React.useState(null);
 
@@ -47,6 +49,11 @@ function Component({
   const handleChooseAccount = async account => {
     await chooseAccount(account);
     handleCloseAccounts();
+  };
+
+  const handleLogout = () => {
+    handleCloseAccounts();
+    logout();
   };
 
   return (
@@ -79,19 +86,22 @@ function Component({
               open={Boolean(accountMenuAnchorEl)}
               onClose={handleCloseAccounts}
             >
-              <MenuItem>SELECT ACCOUNT</MenuItem>
-              <Divider />
+              {isMnemonicType ? null : <MenuItem>SELECT ACCOUNT</MenuItem>}
+              {isMnemonicType ? null : <Divider />}
               {accounts.map(a => (
                 <MenuItem onClick={() => handleChooseAccount(a)} key={a}>
                   {a} {a !== account ? null : <CheckIcon />}
                 </MenuItem>
               ))}
+              {isMnemonicType !== LOGIC_TYPES_MNEMONIC ? null : <Divider />}
+              {isMnemonicType ? null : (
+                <MenuItem onClick={handleAddAccount}>
+                  <AddIcon /> Add Account
+                </MenuItem>
+              )}
+
               <Divider />
-              <MenuItem onClick={handleAddAccount}>
-                <AddIcon /> Add Account
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={logout}>
+              <MenuItem onClick={handleLogout}>
                 <LogoutIcon /> Logout
               </MenuItem>
             </Menu>
@@ -113,12 +123,13 @@ function Component({
 
 const mapStateToProps = state => {
   const {
-    wallet: { account, accounts },
+    wallet: { account, accounts, type: loginType },
   } = state;
   return {
     isDark: isDarkSelector(state),
     account,
     accounts,
+    isMnemonicType: loginType !== LOGIC_TYPES_MNEMONIC,
   };
 };
 

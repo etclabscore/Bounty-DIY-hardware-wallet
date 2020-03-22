@@ -1,6 +1,7 @@
 import { ACTION_TYPE_UPDATE_WALLET } from 'config';
 
 const DEFAULT_STATE = {
+  type: null,
   wallet: null,
   account: null,
   passphrase: null,

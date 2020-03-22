@@ -31,7 +31,7 @@ const Component = ({ path, match }) => {
   // console.log(activeTab, path);
 
   const handleActiveTabChange = (event, newValue) => {
-    history.push(`/sign-or-verify${newValue ? ROUTES[newValue] : ''}`);
+    history.push(`/message${newValue ? ROUTES[newValue] : ''}`);
   };
 
   return (
@@ -54,7 +54,7 @@ const Component = ({ path, match }) => {
             <Route
               exact
               key={path}
-              path={`/sign-or-verify${ROUTES[i]}`}
+              path={`/message${ROUTES[i]}`}
               component={ROUTE_COMPONENTS[i]}
             />
           ))}
@@ -66,6 +66,6 @@ const Component = ({ path, match }) => {
 
 export default connect((_, { match }) => {
   return {
-    path: window.location.pathname.replace('/sign-or-verify', ''),
+    path: window.location.pathname.replace('/message', ''),
   };
 }, mapDispatchToProps)(Component);

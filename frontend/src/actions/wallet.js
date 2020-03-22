@@ -1,6 +1,13 @@
+import Promise from 'bluebird';
+import filePicker from 'component-file-picker';
 import rpc from 'utils/xhr';
 import cache from 'utils/cache';
-import { ACTION_TYPE_UPDATE_WALLET } from 'config';
+import {
+  ACTION_TYPE_UPDATE_WALLET,
+  LOGIC_TYPES_KEYFILE,
+  LOGIC_TYPES_MNEMONIC,
+} from 'config';
+import { history } from 'store';
 
 export function addAccount() {
   return async(dispatch, getState) => {
@@ -45,11 +52,19 @@ export function logout() {
         accounts: [],
       },
     });
+    history.push('/');
   };
 }
 
-export function login(wallet, passphrase) {
+export function importMnemonic(mnemonic, passphrase) {
   return async(dispatch, getState) => {
+    const wallet = await rpc('importMnemonic', {
+      name: 'Default',
+      passphrase,
+      mnemonic,
+      hdPath: "m/44'/61'/0'/0", // eslint-disable-line quotes
+    });
+
     const account = await rpc('getAccountFromMnemonic', {
       uuid: wallet,
       passphrase,
@@ -57,6 +72,7 @@ export function login(wallet, passphrase) {
     });
     const accounts = [account];
 
+    cache('login_type', LOGIC_TYPES_MNEMONIC);
     cache('wallet', wallet);
     cache('account', account);
     cache('passphrase', passphrase);
@@ -65,6 +81,7 @@ export function login(wallet, passphrase) {
     dispatch({
       type: ACTION_TYPE_UPDATE_WALLET,
       payload: {
+        type: LOGIC_TYPES_MNEMONIC,
         account,
         wallet,
         passphrase,
@@ -74,5 +91,40 @@ export function login(wallet, passphrase) {
   };
 }
 
-// store.dispatch(login('aebe0eaf-8cdb-4f0f-9e82-d0a52412d264', 'passphrase8'));
-window.login = login;
+export function importKeystorage(keyfile, passphrase) {
+  return async(dispatch, getState) => {
+    const account = await rpc('importKeyfile', passphrase, keyfile);
+    const accounts = [account];
+
+    cache('login_type', LOGIC_TYPES_KEYFILE);
+    cache('wallet', null);
+    cache('account', account);
+    cache('passphrase', passphrase);
+    cache('accounts', accounts);
+
+    dispatch({
+      type: ACTION_TYPE_UPDATE_WALLET,
+      payload: {
+        type: LOGIC_TYPES_KEYFILE,
+        account,
+        wallet: null,
+        passphrase,
+        accounts,
+      },
+    });
+  };
+}
+
+export function importKeyfile() {
+  return (dispatch, getState) => {
+    return new Promise(resolve => {
+      filePicker(([file]) => {
+        const reader = new FileReader();
+        reader.onload = function() {
+          resolve({ name: file.name, data: JSON.parse(reader.result) });
+        };
+        reader.readAsText(file);
+      });
+    });
+  };
+}

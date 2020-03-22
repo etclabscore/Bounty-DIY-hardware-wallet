@@ -5,7 +5,7 @@ import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { Paper, Button } from '@material-ui/core';
-import Loader from './Loader';
+import Loader from 'components/Loader';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -53,7 +53,7 @@ function Component({ account, isWorking }) {
             variant="contained"
             fullWidth
             color="secondary"
-            to={'/generateMnemonic'}
+            to={'/mnemonic'}
             component={Link}
           >
             Generate a Keystore File
@@ -80,7 +80,7 @@ function Component({ account, isWorking }) {
             variant="contained"
             fullWidth
             color="secondary"
-            to={'/generateKeystore'}
+            to={'/keystore'}
             component={Link}
           >
             Generate a Mnemonic Phrase

@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
-import SignOrVerify from './SignOrVerify/SignOrVerify';
-import Setup from './Setup';
+import Message from './Message/Message';
+import Import from './Import/Import';
+import Generate from './Generate/Generate';
+import Landing from './Landing';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -18,12 +20,15 @@ function Component({ account }) {
   return account ? (
     <div className={classes.container}>
       <Switch>
-        <Route path={'/sign-or-verify'} component={SignOrVerify} />
+        <Route path={'/message'} component={Message} />
+        <Route path={'/'} render={() => <Landing to="/message" />} />
       </Switch>
     </div>
   ) : (
     <Switch>
-      <Route path={'/'} component={Setup} />
+      <Route path={'/generate'} component={Generate} />
+      <Route path={'/import'} component={Import} />
+      <Route path={'/'} render={() => <Landing to="/import" />} />
     </Switch>
   );
 }
