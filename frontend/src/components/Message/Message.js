@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as mapDispatchToProps from 'actions';
-import { Tabs, Tab } from '@material-ui/core';
+import { Paper, Tabs, Tab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Route, Switch } from 'react-router-dom';
+import clsx from 'clsx';
 import Sign from './Sign';
 import Verify from './Verify';
+import SignTransaction from './SignTransaction';
+import BroadcastSignedTransaction from './BroadcastSignedTransaction';
 import { history } from 'store';
 
 const useStyles = makeStyles(theme => ({
+  container: { width: 800, padding: 50 },
   tab: {
     minWidth: 'auto',
     padding: 7,
@@ -19,9 +23,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ROUTES = ['/', '/verify'];
-const ROUTE_COMPONENTS = [Sign, Verify];
-const ROUTE_LABELS = ['Sign Message', 'Verify Message'];
+const ROUTES = [
+  '/',
+  '/verify',
+  '/sign-transaction',
+  '/broadcast-signed-transaction',
+];
+const ROUTE_COMPONENTS = [
+  Sign,
+  Verify,
+  SignTransaction,
+  BroadcastSignedTransaction,
+];
+const ROUTE_LABELS = [
+  'Sign Message',
+  'Verify Message',
+  'Sign Transaction',
+  'Broadcast Signed Transaction',
+];
 
 const Component = ({ path, match }) => {
   const classes = useStyles();
@@ -35,31 +54,33 @@ const Component = ({ path, match }) => {
   };
 
   return (
-    <div>
-      <Tabs
-        value={activeTab}
-        indicatorColor="secondary"
-        textColor="inherit"
-        onChange={handleActiveTabChange}
-        aria-label="tabs"
-      >
-        {ROUTE_LABELS.map(label => (
-          <Tab className={classes.tab} key={label} {...{ label }} />
-        ))}
-      </Tabs>
-
-      <div className={classes.activeTabContent}>
-        <Switch>
-          {ROUTES.map((path, i) => (
-            <Route
-              exact
-              key={path}
-              path={`/message${ROUTES[i]}`}
-              component={ROUTE_COMPONENTS[i]}
-            />
+    <div className={clsx('flex flex--justify-center')}>
+      <Paper className={classes.container}>
+        <Tabs
+          value={activeTab}
+          indicatorColor="secondary"
+          textColor="inherit"
+          onChange={handleActiveTabChange}
+          aria-label="tabs"
+        >
+          {ROUTE_LABELS.map(label => (
+            <Tab className={classes.tab} key={label} {...{ label }} />
           ))}
-        </Switch>
-      </div>
+        </Tabs>
+
+        <div className={classes.activeTabContent}>
+          <Switch>
+            {ROUTES.map((path, i) => (
+              <Route
+                exact
+                key={path}
+                path={`/message${ROUTES[i]}`}
+                component={ROUTE_COMPONENTS[i]}
+              />
+            ))}
+          </Switch>
+        </div>
+      </Paper>
     </div>
   );
 };

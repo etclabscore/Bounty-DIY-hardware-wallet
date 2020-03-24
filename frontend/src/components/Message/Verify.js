@@ -20,6 +20,9 @@ const SAMPLE = {
 };
 
 const useStyles = makeStyles(theme => ({
+  result: {
+    padding: 20,
+  },
   row: {
     marginBottom: 20,
   },
@@ -102,9 +105,11 @@ const Component = ({ account, passphrase }) => {
         />
       </div>
 
-      <Button type="submit" color="secondary">
-        Verify
-      </Button>
+      <div className={classes.row}>
+        <Button type="submit" variant="contained" color="secondary">
+          Verify
+        </Button>
+      </div>
     </form>
   );
 };

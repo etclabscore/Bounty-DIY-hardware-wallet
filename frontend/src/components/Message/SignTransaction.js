@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Paper } from '@material-ui/core';
-import { stringToHex, numberToHex } from '@etclabscore/eserialize';
 
 const useStyles = makeStyles(theme => ({
   result: {
@@ -16,29 +15,23 @@ const useStyles = makeStyles(theme => ({
 
 const Component = ({ account, passphrase, rpc }) => {
   const classes = useStyles();
-  const [messageSignature, setMessageSignature] = React.useState(null);
+  const [result, setResult] = React.useState(null);
 
   const onSubmit = async e => {
     e.preventDefault();
 
-    setMessageSignature(null);
+    setResult(null);
 
-    const message = (e.target.message.value ?? '').trim();
-
-    const chainId = 6;
-    const messageHex = stringToHex(message);
-
-    setMessageSignature(
-      await rpc('sign', messageHex, account, passphrase, numberToHex(chainId))
-    );
+    const signedTransaction = (e.target.signedTransaction.value ?? '').trim();
+    console.log(signedTransaction);
   };
 
   return (
     <form {...{ onSubmit }} className="flex flex--column">
       <div className={classes.row}>
         <TextField
-          id="message"
-          label="Message"
+          id="signedTransaction"
+          label="Signed Transaction"
           type="text"
           InputLabelProps={{
             shrink: true,
@@ -50,17 +43,18 @@ const Component = ({ account, passphrase, rpc }) => {
           required
         />
       </div>
-
       <div className={classes.row}>
         <Button type="submit" variant="contained" color="secondary">
-          Sign
+          Broadcast
         </Button>
       </div>
 
-      {!messageSignature ? null : (
-        <Paper elevation={0} className={classes.messageSignature}>
-          {messageSignature}
-        </Paper>
+      {!result ? null : (
+        <div className={classes.row}>
+          <Paper elevation={0} className={classes.result}>
+            {result}
+          </Paper>
+        </div>
       )}
     </form>
   );

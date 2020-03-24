@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
   heading: {
     marginBottom: 30,
   },
+  button: {
+    width: 150,
+  },
 }));
 
 function Component({ updateWallet, signatoryServerUrl, history }) {
@@ -67,15 +70,20 @@ function Component({ updateWallet, signatoryServerUrl, history }) {
           </div>
 
           <div className={clsx('flex flex--align-center')}>
-            <Button variant="outlined" fullWidth to={'/'} component={Link}>
+            <Button
+              variant="outlined"
+              to={'/'}
+              component={Link}
+              className={classes.button}
+            >
               Cancel
             </Button>
             &nbsp; &nbsp;
             <Button
               type="submit"
               variant="contained"
-              fullWidth
               color="secondary"
+              className={classes.button}
             >
               Save
             </Button>
