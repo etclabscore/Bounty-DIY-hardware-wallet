@@ -78,7 +78,7 @@ function Component({
   };
 
   React.useEffect(() => {
-    if (IS_DEV) {
+    if (IS_DEV && !shuffledMnemonic.length) {
       const mnemonic = 'jelly practice crash endless sphere abuse eye angry flash oblige cycle brain'
         .split(' ')
         .map((word, index) => ({ word, index }));
@@ -87,7 +87,7 @@ function Component({
         shuffledMnemonic: _.shuffle(mnemonic),
       });
     }
-  }, [updateWallet]);
+  }, [shuffledMnemonic.length, updateWallet]);
 
   return (
     <div
