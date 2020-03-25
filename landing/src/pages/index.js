@@ -3,24 +3,26 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Tooltip from '@material-ui/core/Tooltip';
-import c from 'clsx';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
 import LightIcon from '@material-ui/icons/WbIncandescent';
 import DarkIcon from '@material-ui/icons/Brightness2';
 import { Helmet } from 'react-helmet';
-import theme from './theme';
-import './style.scss';
+import theme from '../utils/theme';
+import cache from '../utils/cache';
+import '../utils/style.scss';
 
 const IndexPage = () => {
-  const [isDark, setIsDark] = React.useState(
-    window.localStorage.getItem('isDark') !== '0'
-  );
+  const [isDark, setIsDark] = React.useState(cache('isDark') !== '0');
   const toggleTheme = () => {
     const is = !isDark;
     setIsDark(is);
-    window.localStorage.setItem('isDark', is ? '1' : '0');
+    cache('isDark', is ? '1' : '0');
   };
+
+  React.useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
 
   return (
     <ThemeProvider theme={createMuiTheme(theme(isDark))}>
@@ -38,7 +40,7 @@ const IndexPage = () => {
         </Tooltip>
       </div>
 
-      <div className={c('home flex flex--column', { dark: isDark })}>
+      <div className={'home flex flex--column'}>
         <Helmet>
           <meta charSet="utf-8" />
           <title>Signatory Client</title>
@@ -60,7 +62,7 @@ const IndexPage = () => {
           <br />
           Ethereum Client for{' '}
           <a
-            className="home__esri"
+            className="home__highlight hover"
             href="https://signatory.dev"
             target="_blank"
             rel="noreferrer noopener"
@@ -76,11 +78,7 @@ const IndexPage = () => {
             target="_blank"
             rel="noreferrer noopener"
           >
-            <Button
-              variant="contained"
-              color="secondary"
-              style={{ width: 250, height: 45 }}
-            >
+            <Button variant="contained" color="secondary" fullWidth>
               Download
             </Button>
           </a>
@@ -91,11 +89,7 @@ const IndexPage = () => {
             target="_blank"
             rel="noreferrer noopener"
           >
-            <Button
-              variant="contained"
-              color="default"
-              style={{ width: 250, height: 45 }}
-            >
+            <Button variant="contained" color="default" fullWidth>
               Report an Issue
             </Button>
           </a>
@@ -119,7 +113,7 @@ const IndexPage = () => {
           </div>
         </div>
 
-        <div style={{ color: '#666', fontSize: 12 }}>&copy; 2020 Vb</div>
+        <div className="footer">&copy; 2020 Vb</div>
       </div>
     </ThemeProvider>
   );

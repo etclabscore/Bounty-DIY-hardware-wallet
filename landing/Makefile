@@ -1,4 +1,7 @@
 develop:
 	@npm run $@
 
-.PHONY: develop
+build:
+	@gatsby clean && gatsby build --prefix-paths
+
+.PHONY: build develop

@@ -1,6 +1,6 @@
 {
-  "name": "Signatory Wallet Manager",
-  "description": "Signatory Wallet Manager",
+  "name": "Signatory Client",
+  "description": "Signatory Client",
   "icons": [
     {
       "src": "favicon.ico",

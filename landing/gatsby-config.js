@@ -46,4 +46,5 @@ module.exports = {
 
     'gatsby-plugin-sass',
   ],
+  pathPrefix: '/signatory-client',
 };

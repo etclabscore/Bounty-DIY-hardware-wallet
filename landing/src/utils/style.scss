@@ -1,4 +1,7 @@
 $mobile-breakpoint: 700px;
+$dark-color: #212121;
+$dark-border-color: #373836;
+$dark-text-color: white;
 
 html,
 body {
@@ -6,7 +9,6 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 body {
@@ -61,6 +63,14 @@ h6 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.hover {
+  transition: opacity 0.8s ease-out;
+
+  &:hover {
+    opacity: 0.6;
+  }
 }
 
 .flex {
@@ -136,6 +146,12 @@ h6 {
 
     & > div {
       margin: 0 10px;
+      width: 250px;
+      height: 45px;
+
+      @media all and (max-width: $mobile-breakpoint) {
+        width: 100%;
+      }
     }
 
     @media all and (max-width: $mobile-breakpoint) {
@@ -156,7 +172,7 @@ h6 {
     }
   }
 
-  &__esri {
+  &__highlight {
     color: #ff3f81;
   }
 }
@@ -165,20 +181,8 @@ h6 {
   position: relative;
   margin-bottom: 50px;
 
-  .titlebar,
-  .screenshot__content {
-    opacity: 0.8;
-  }
-
   @media all and (max-width: $mobile-breakpoint) {
     margin-bottom: 0;
-  }
-
-  &:hover {
-    .titlebar,
-    .screenshot__content {
-      opacity: 0.6;
-    }
   }
 
   &__content {
@@ -312,4 +316,45 @@ h6 {
   margin-left: 1px;
   opacity: 0;
   display: none;
+}
+
+.dark {
+  scrollbar-face-color: $dark-border-color;
+  scrollbar-base-color: $dark-border-color;
+  scrollbar-3dlight-color: $dark-border-color;
+  scrollbar-highlight-color: $dark-border-color;
+  scrollbar-track-color: $dark-color;
+  scrollbar-arrow-color: $dark-color;
+  scrollbar-shadow-color: $dark-border-color;
+  scrollbar-dark-shadow-color: $dark-border-color;
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-button {
+    background-color: $dark-color;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: $dark-border-color;
+  }
+  ::-webkit-scrollbar-track-piece {
+    background-color: $dark-color;
+  }
+  ::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: #666;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: $dark-border-color;
+  }
+  ::-webkit-resizer {
+    background-color: #666;
+  }
+}
+
+.footer {
+  color: #666;
+  font-size: 12px;
 }
