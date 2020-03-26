@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
@@ -44,7 +44,9 @@ function Component({
     }
   };
 
-  return (
+  return !account ? (
+    <Redirect to="/generate/keystore" />
+  ) : (
     <div
       {...{ onSubmit }}
       className={clsx(

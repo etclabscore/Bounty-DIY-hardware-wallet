@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+  client:
+    container_name: frontend
+    build: ./frontend
+    command: yarn start
+    ports:
+      - "${CLIENT_PORT}:3000"
+
+  server:
+    container_name: daemon
+    build: ./daemon
+    command: ./node_modules/.bin/signatory -d /data
+    ports:
+      - "${SERVER_PORT}:1999"

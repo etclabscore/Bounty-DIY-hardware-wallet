@@ -1,9 +1,5 @@
 import { createSelector } from 'reselect';
-const {
-  RequestManager,
-  HTTPTransport,
-  Client,
-} = require('@open-rpc/client-js');
+import { RequestManager, HTTPTransport, Client } from '@open-rpc/client-js';
 
 export const rpcClient = createSelector(
   state => state.wallet.signatoryServerUrl,

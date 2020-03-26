@@ -1,7 +1,7 @@
 run: node_modules
-	@concurrently "BROWSER=none npm run start" "wait-on http://localhost:5557 && electron bin/electron.js"
+	@yarn start
 
 node_modules:
-	@npm i
+	@yarn install
 
 .PHONY: run

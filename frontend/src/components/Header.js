@@ -61,7 +61,13 @@ function Component({
   return (
     <AppBar position="static" color="inherit">
       <Toolbar color="inherit">
-        <IconButton edge="start" color="inherit" aria-label="menu">
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          to={'/'}
+          component={Link}
+        >
           <MenuIcon />
         </IconButton>
         <Typography

@@ -142,11 +142,11 @@ h6 {
   }
 
   &__ctas {
-    margin-bottom: 10px;
+    margin-bottom: 25px;
 
-    & > div {
+    & > a {
       margin: 0 10px;
-      width: 250px;
+      width: 200px;
       height: 45px;
 
       @media all and (max-width: $mobile-breakpoint) {
@@ -159,9 +159,9 @@ h6 {
       justify-content: flex-start;
       margin-bottom: 30px;
 
-      & > div {
+      & > a {
         width: auto;
-        margin: 10px 0;
+        margin: 5px 0;
       }
     }
   }
@@ -188,6 +188,10 @@ h6 {
   &__content {
     height: 275px;
     overflow-y: hidden;
+
+    @media all and (max-width: $mobile-breakpoint) {
+      height: 200px;
+    }
 
     img {
       width: 100%;

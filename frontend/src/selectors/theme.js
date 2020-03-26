@@ -11,12 +11,14 @@ export default createSelector(isDarkSelector, isDark =>
   createMuiTheme({
     typography: {
       fontFamily: [
-        'Roboto',
-        'Avenir',
-        'proxima-nova',
-        'Source Sans Pro',
-        'Avenir',
-        'sans-serif',
+        'Source Code Pro',
+        'monospace',
+        // 'Roboto',
+        // 'Avenir',
+        // 'proxima-nova',
+        // 'Source Sans Pro',
+        // 'Avenir',
+        // 'sans-serif',
       ].join(','),
     },
     palette: {

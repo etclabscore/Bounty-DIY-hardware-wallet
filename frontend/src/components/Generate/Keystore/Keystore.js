@@ -32,16 +32,12 @@ function Component({ history, rpc }) {
     if (passphrase !== cpassphrase)
       return sl('error', 'Passwords do not match.');
 
-    try {
-      const account = await rpc('createAccount', {
-        name: Date.now().toString(),
-        description: Date.now().toString(),
-        passphrase,
-      });
-      history.push(`/generate/keystore/save/${account}`);
-    } catch (e) {
-      sl('error', e.message);
-    }
+    const account = await rpc('createAccount', {
+      name: Date.now().toString(),
+      description: Date.now().toString(),
+      passphrase,
+    });
+    history.push(`/generate/keystore/save/${account}`);
   };
 
   return (

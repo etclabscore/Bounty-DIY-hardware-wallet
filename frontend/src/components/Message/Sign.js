@@ -7,30 +7,32 @@ import { stringToHex, numberToHex } from '@etclabscore/eserialize';
 
 const useStyles = makeStyles(theme => ({
   result: {
-    padding: 20,
+    wordBreak: 'break-all',
   },
   row: {
     marginBottom: 20,
   },
 }));
 
-const Component = ({ account, passphrase, rpc }) => {
+const Component = ({ account, passphrase, rpc, chainId }) => {
   const classes = useStyles();
-  const [messageSignature, setMessageSignature] = React.useState(null);
+  const [result, setResult] = React.useState(null);
 
   const onSubmit = async e => {
     e.preventDefault();
 
-    setMessageSignature(null);
+    setResult(null);
 
-    const message = (e.target.message.value ?? '').trim();
-
-    const chainId = 6;
-    const messageHex = stringToHex(message);
-
-    setMessageSignature(
-      await rpc('sign', messageHex, account, passphrase, numberToHex(chainId))
+    const msg = (e.target.message.value ?? '').trim();
+    const sig = await rpc(
+      'sign',
+      stringToHex(msg),
+      account,
+      passphrase,
+      numberToHex(chainId)
     );
+
+    setResult(sig);
   };
 
   return (
@@ -57,15 +59,18 @@ const Component = ({ account, passphrase, rpc }) => {
         </Button>
       </div>
 
-      {!messageSignature ? null : (
-        <Paper elevation={0} className={classes.messageSignature}>
-          {messageSignature}
+      {!result ? null : (
+        <Paper elevation={0} className={classes.result}>
+          {result}
         </Paper>
       )}
     </form>
   );
 };
 
-export default connect(({ wallet: { account, passphrase } }, { match }) => {
-  return { account, passphrase };
-}, mapDispatchToProps)(Component);
+export default connect(
+  ({ wallet: { account, passphrase, chainId } }, { match }) => {
+    return { account, passphrase, chainId };
+  },
+  mapDispatchToProps
+)(Component);

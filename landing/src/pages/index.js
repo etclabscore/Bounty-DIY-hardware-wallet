@@ -58,9 +58,9 @@ const IndexPage = () => {
         <h3 className="home__top-heading">Signatory Client</h3>
 
         <h1 className="home__main-heading">
-          A Modern
+          A Modern, Elegant
           <br />
-          Ethereum Client for{' '}
+          Ethereum Wallet powered by{' '}
           <a
             className="home__highlight hover"
             href="https://signatory.dev"
@@ -74,15 +74,14 @@ const IndexPage = () => {
         <div className="flex flex--justify-center home__ctas">
           <a
             className="screenshot"
-            href="https://github.com/vbstreetz/signatory-client/releases"
+            href="https://github.com/vbstreetz/signatory-client"
             target="_blank"
             rel="noreferrer noopener"
           >
             <Button variant="contained" color="secondary" fullWidth>
-              Download
+              Install
             </Button>
           </a>
-          &nbsp; &nbsp;
           <a
             className="screenshot"
             href="https://github.com/vbstreetz/signatory-client/issues"

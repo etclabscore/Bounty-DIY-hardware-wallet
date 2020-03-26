@@ -4,11 +4,12 @@ import * as mapDispatchToProps from 'actions';
 import { Paper, Tabs, Tab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Route, Switch } from 'react-router-dom';
-import clsx from 'clsx';
 import Sign from './Sign';
 import Verify from './Verify';
-import SignTransaction from './SignTransaction';
-import BroadcastSignedTransaction from './BroadcastSignedTransaction';
+// import SignTransaction from './SignTransaction';
+// import BroadcastSignedTransaction from './BroadcastSignedTransaction';
+import SignTransaction from 'components/WIP';
+import BroadcastSignedTransaction from 'components/WIP';
 import { history } from 'store';
 
 const useStyles = makeStyles(theme => ({
@@ -54,7 +55,7 @@ const Component = ({ path, match }) => {
   };
 
   return (
-    <div className={clsx('flex flex--justify-center')}>
+    <div className={'flex flex--justify-center'}>
       <Paper className={classes.container}>
         <Tabs
           value={activeTab}

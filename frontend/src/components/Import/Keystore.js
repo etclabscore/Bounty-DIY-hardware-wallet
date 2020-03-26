@@ -28,11 +28,7 @@ function Component({ importKeyfile, importKeystorage }) {
       return sl('error', 'Please select the keyfile...');
     }
     const passphrase = (e.target.passphrase.value ?? '').trim();
-    try {
-      await importKeystorage(keyfile.data, passphrase);
-    } catch (e) {
-      sl('error', e.message);
-    }
+    await importKeystorage(keyfile.data, passphrase);
   };
 
   return (

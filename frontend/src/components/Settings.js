@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Button, TextField, Paper } from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
+import qs from 'query-string';
 import clsx from 'clsx';
-import sl from 'utils/sl';
 import cache from 'utils/cache';
 
 const useStyles = makeStyles(theme => ({
@@ -25,21 +25,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({ updateWallet, signatoryServerUrl, history }) {
+function Component({ match, updateWallet, signatoryServerUrl, history }) {
   const classes = useStyles();
+  const query = qs.parse(window.location.search.replace('?', ''));
+  const backTo = query['back-to'] || '/';
 
   const onSubmit = async e => {
     e.preventDefault();
 
     const signatoryServerUrl = (e.target.signatoryServerUrl.value ?? '').trim();
 
-    try {
-      cache('signatoryServerUrl', signatoryServerUrl);
-      updateWallet({ signatoryServerUrl });
-      history.push('/');
-    } catch (e) {
-      sl('error', e.message);
-    }
+    cache('signatoryServerUrl', signatoryServerUrl);
+    updateWallet({ signatoryServerUrl });
+    history.push(backTo);
   };
 
   return (
@@ -71,21 +69,21 @@ function Component({ updateWallet, signatoryServerUrl, history }) {
 
           <div className={clsx('flex flex--align-center')}>
             <Button
-              variant="outlined"
-              to={'/'}
-              component={Link}
-              className={classes.button}
-            >
-              Cancel
-            </Button>
-            &nbsp; &nbsp;
-            <Button
               type="submit"
               variant="contained"
               color="secondary"
               className={classes.button}
             >
               Save
+            </Button>
+            &nbsp; &nbsp;
+            <Button
+              variant="outlined"
+              to={backTo}
+              component={Link}
+              className={classes.button}
+            >
+              Cancel
             </Button>
           </div>
         </form>

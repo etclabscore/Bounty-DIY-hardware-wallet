@@ -31,11 +31,7 @@ function Component({ importMnemonic }) {
       return sl('error', 'Please enter the mnemonic phrase...');
     }
 
-    try {
-      await importMnemonic(mnemonic, passphrase);
-    } catch (e) {
-      sl('error', e.message);
-    }
+    await importMnemonic(mnemonic, passphrase);
   };
 
   return (
