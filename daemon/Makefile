@@ -2,9 +2,9 @@ test: node_modules
 	@node src/test.js
 
 server: node_modules
-	@./node_modules/.bin/signatory -d ./data
+	@npm run start
 
 node_modules:
-	@npm i
+	@yarn install
 
 .PHONY: server test

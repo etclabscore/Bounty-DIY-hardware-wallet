@@ -11,6 +11,6 @@ services:
   server:
     container_name: daemon
     build: ./daemon
-    command: ./node_modules/.bin/signatory -d /data
+    command: yarn start
     ports:
       - "${SERVER_PORT}:1999"

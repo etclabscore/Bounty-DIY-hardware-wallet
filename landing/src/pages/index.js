@@ -71,7 +71,7 @@ const IndexPage = () => {
           </a>
         </h1>
 
-        <div className="flex flex--justify-center home__ctas">
+        <div className="flex home__ctas">
           <a
             className="screenshot"
             href="https://github.com/vbstreetz/signatory-client"
@@ -110,6 +110,40 @@ const IndexPage = () => {
               width="100%"
             />
           </div>
+        </div>
+
+        <div style={{ marginBottom: 40 }}>
+          <p>
+            1. Install <a href="https://www.docker.com/">docker</a> and{' '}
+            <a href="https://docs.docker.com/compose/install/">
+              docker-compose
+            </a>
+          </p>
+
+          <p>
+            2. Clone repo
+            <br />
+            <code>
+              $ git clone https://github.com/vbstreetz/signatory-client
+            </code>
+          </p>
+
+          <p>
+            3. Configure environment
+            <br />
+            <code>$ cp .env.sample .env</code>
+          </p>
+
+          <p>
+            4. Boot server and frontend
+            <br />
+            <code>$ make</code>
+          </p>
+
+          <p>
+            5. Visit app at{' '}
+            <a href="http://localhost:4444">http://localhost:4444</a>
+          </p>
         </div>
 
         <div className="footer">&copy; 2020 Vb</div>

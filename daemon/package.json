@@ -4,12 +4,13 @@
   "description": "",
   "main": "src/test.js",
   "scripts": {
+    "start": "./node_modules/.bin/signatory -d ./data",
     "test": "src/test.js"
   },
   "author": "vb <vbstreetz@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@etclabscore/signatory": "^1.0.6"
+    "@etclabscore/signatory": "git+https://github.com/vbstreetz/signatory.git#hotfix/sign"
   },
   "devDependencies": {
     "@etclabscore/eserialize": "^1.0.2",

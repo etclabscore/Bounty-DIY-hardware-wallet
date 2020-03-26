@@ -26,6 +26,19 @@ body {
 
 a {
   text-decoration: none;
+
+  &,
+  &:visited {
+    color: #19a79a;
+  }
+}
+
+code {
+  background: #202020;
+  padding: 10px;
+  margin: 10px 10px;
+  border-radius: 4px;
+  display: block;
 }
 
 h1,
