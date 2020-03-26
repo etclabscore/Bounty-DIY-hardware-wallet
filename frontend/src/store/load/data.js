@@ -1,5 +1,5 @@
 import cache from 'utils/cache';
-import { DEFAULT_SIGNATORY_SERVER_URL } from 'config';
+import { DEFAULT_SIGNATORY_SERVER_URL, DEFAULT_CHAIN_ID } from 'config';
 
 export default Base =>
   class extends Base {
@@ -18,6 +18,7 @@ export default Base =>
         this.state.wallet.accounts = accounts;
         this.state.wallet.signatoryServerUrl =
           cache('signatoryServerUrl') || DEFAULT_SIGNATORY_SERVER_URL;
+        this.state.wallet.chainId = cache('chainId') || DEFAULT_CHAIN_ID;
       } catch (error) {
         console.log(error);
       }

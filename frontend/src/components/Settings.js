@@ -1,7 +1,15 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, TextField, Paper } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Paper,
+  NativeSelect,
+  FormControl,
+  InputLabel,
+} from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
@@ -25,18 +33,33 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({ match, updateWallet, signatoryServerUrl, history }) {
+function Component({
+  match,
+  updateWallet,
+  signatoryServerUrl,
+  chainId,
+  history,
+}) {
   const classes = useStyles();
   const query = qs.parse(window.location.search.replace('?', ''));
   const backTo = query['back-to'] || '/';
+  const [formData, setFormData] = React.useState({ chainId });
+
+  const handleChange = (event, fmt = _.identity) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: fmt(value),
+    });
+  };
 
   const onSubmit = async e => {
     e.preventDefault();
-
     const signatoryServerUrl = (e.target.signatoryServerUrl.value ?? '').trim();
-
+    const { chainId } = formData;
     cache('signatoryServerUrl', signatoryServerUrl);
-    updateWallet({ signatoryServerUrl });
+    cache('chainId', chainId);
+    updateWallet({ chainId, signatoryServerUrl });
     history.push(backTo);
   };
 
@@ -67,6 +90,24 @@ function Component({ match, updateWallet, signatoryServerUrl, history }) {
             />
           </div>
 
+          <FormControl className={classes.row}>
+            <InputLabel shrink htmlFor="age-native-label-placeholder">
+              Chain*
+            </InputLabel>
+            <NativeSelect
+              value={formData.chainId}
+              onChange={e => handleChange(e, parseInt)}
+              inputProps={{
+                name: 'chainId',
+                id: 'chainId',
+              }}
+              fullWidth
+            >
+              <option value={61}>Ethereum Classic</option>
+              <option value={1}>Ethereum</option>
+            </NativeSelect>
+          </FormControl>
+
           <div className={clsx('flex flex--align-center')}>
             <Button
               type="submit"
@@ -93,6 +134,6 @@ function Component({ match, updateWallet, signatoryServerUrl, history }) {
 }
 
 export default connect(
-  ({ wallet: { signatoryServerUrl } }) => ({ signatoryServerUrl }),
+  ({ wallet }) => ({ ...wallet }),
   mapDispatchToProps
 )(Component);

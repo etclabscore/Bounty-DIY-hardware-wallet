@@ -1,8 +1,7 @@
-FROM node:10.16.0
+FROM node:10.18.0
 
 WORKDIR /tmp
 
-RUN npm install -g yarn
 ADD package.json package.json
 RUN yarn install --unsafe-perm
 
