@@ -17,12 +17,15 @@ It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCryp
 
 ## Getting started
 
-Setup [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/)
-Clone this repo and run:
+1. Setup [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-    $ make
+2. Copy `.env.sample` to `.env` and configure appropriately.
 
-Visit app at http://localhost:4444
+3. Clone this repo and run:
+
+   \$ make
+
+4. Visit app at http://localhost:4444
 
 If you install the client on a remote node like a single-board computer, be sure to update the server location in settings.
 

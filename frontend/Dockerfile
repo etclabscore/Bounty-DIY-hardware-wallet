@@ -4,7 +4,7 @@ WORKDIR /tmp
 
 RUN npm install -g yarn
 ADD package.json package.json
-RUN npm install --unsafe-perm
+RUN yarn install --unsafe-perm
 
 ADD src src
 ADD public public
