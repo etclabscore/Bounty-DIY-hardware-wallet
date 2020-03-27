@@ -62,14 +62,14 @@ export function logout() {
   };
 }
 
-export function importMnemonic(mnemonic, passphrase) {
+export function importMnemonic(mnemonic, passphrase, hdPath) {
   return async(dispatch, getState) => {
     const wallet = await dispatch(
       rpc('importMnemonic', {
         name: 'Default',
         passphrase,
         mnemonic,
-        hdPath: "m/44'/61'/0'/0", // eslint-disable-line quotes
+        hdPath,
       })
     );
 

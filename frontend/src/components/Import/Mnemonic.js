@@ -1,9 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, TextField } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  NativeSelect,
+  FormControl,
+  InputLabel,
+} from '@material-ui/core';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
+import { HD_PATHS, ETC_TREZOR } from 'config';
 import clsx from 'clsx';
 import sl from 'utils/sl';
 
@@ -20,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 function Component({ importMnemonic }) {
   const classes = useStyles();
-
+  const [hdPath, setHdPath] = React.useState(ETC_TREZOR.value);
   const onSubmit = async e => {
     e.preventDefault();
 
@@ -31,7 +38,7 @@ function Component({ importMnemonic }) {
       return sl('error', 'Please enter the mnemonic phrase...');
     }
 
-    await importMnemonic(mnemonic, passphrase);
+    await importMnemonic(mnemonic, passphrase, hdPath);
   };
 
   return (
@@ -71,6 +78,27 @@ function Component({ importMnemonic }) {
           fullWidth
         />
       </div>
+
+      <FormControl className={classes.row}>
+        <InputLabel shrink htmlFor="age-native-label-placeholder">
+          HD Path*
+        </InputLabel>
+        <NativeSelect
+          value={hdPath}
+          onChange={e => setHdPath(e.target.value)}
+          inputProps={{
+            name: 'hdPath',
+            id: 'hdPath',
+          }}
+          fullWidth
+        >
+          {HD_PATHS.map(({ value, label }) => (
+            <option {...{ value }} key={label}>
+              {label} - {value}
+            </option>
+          ))}
+        </NativeSelect>
+      </FormControl>
 
       <div className={clsx('flex flex--align-center')}>
         <Button variant="outlined" fullWidth to={'/import'} component={Link}>

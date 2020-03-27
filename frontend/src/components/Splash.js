@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
   buttons: {
     '& > *': {
       marginRight: 10,
+      width: 200,
     },
   },
   footer: {
