@@ -10,7 +10,7 @@
   "author": "vb <vbstreetz@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@etclabscore/signatory": "git+https://github.com/vbstreetz/signatory.git#hotfix/sign"
+    "@etclabscore/signatory": "^1.0.6"
   },
   "devDependencies": {
     "@etclabscore/eserialize": "^1.0.2",

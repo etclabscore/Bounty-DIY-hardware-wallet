@@ -4,6 +4,7 @@ import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import * as ethUtil from 'ethereumjs-util';
+import { stringToHex } from '@etclabscore/eserialize';
 import sl from 'utils/sl';
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 export const recoverPublicKeyFromSig = (msg, sig, chainId) => {
   const sigParams = ethUtil.fromRpcSig(sig);
-  const msgHash = ethUtil.hashPersonalMessage(Buffer.from(msg));
+  const msgHash = ethUtil.hashPersonalMessage(Buffer.from(stringToHex(msg)));
   const pubKey = ethUtil.ecrecover(
     msgHash,
     sigParams.v,

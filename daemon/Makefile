@@ -8,7 +8,7 @@ server: node_modules
 
 node_modules:
 	@yarn install
-	@post-yarn-install
+#	@post-yarn-install
 
 post-yarn-install:
 	@cd $(PWD)/node_modules/\@etclabscore/signatory/ && \
