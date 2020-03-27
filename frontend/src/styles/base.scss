@@ -1,20 +1,4 @@
-html,
 body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', 'Avenir', 'proxima-nova', 'Source Sans Pro', Arial,
-    sans-serif;
-  color: #404040;
-  // @include no-select;
-
   .dark {
     color: white;
   }
@@ -28,10 +12,6 @@ a {
 // a * {
 //   color: #19a79a;
 // }
-
-.user-selectable {
-  @include select;
-}
 
 h1,
 h2,

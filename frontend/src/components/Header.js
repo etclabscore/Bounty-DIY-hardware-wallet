@@ -59,7 +59,7 @@ function Component({
   };
 
   return (
-    <AppBar position="static" color="inherit">
+    <AppBar position="fixed" color="inherit">
       <Toolbar color="inherit">
         <IconButton
           edge="start"

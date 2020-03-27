@@ -6,9 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Route, Switch } from 'react-router-dom';
 import Sign from './Sign';
 import Verify from './Verify';
-// import SignTransaction from './SignTransaction';
+import SignTransaction from './SignTransaction';
 // import BroadcastSignedTransaction from './BroadcastSignedTransaction';
-import SignTransaction from 'components/WIP';
 import BroadcastSignedTransaction from 'components/WIP';
 import { history } from 'store';
 

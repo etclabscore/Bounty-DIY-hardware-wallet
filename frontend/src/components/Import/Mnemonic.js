@@ -81,7 +81,7 @@ function Component({ importMnemonic }) {
 
       <FormControl className={classes.row}>
         <InputLabel shrink htmlFor="age-native-label-placeholder">
-          HD Path*
+          Addresses*
         </InputLabel>
         <NativeSelect
           value={hdPath}
