@@ -7,6 +7,8 @@ services:
     command: yarn start
     ports:
       - "${CLIENT_PORT}:3000"
+    environment:
+      NODE_PATH: ./src
 
   server:
     container_name: daemon

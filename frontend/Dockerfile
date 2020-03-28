@@ -7,4 +7,3 @@ RUN yarn install --unsafe-perm --network-timeout 100000
 
 ADD src src
 ADD public public
-ADD .env .env
