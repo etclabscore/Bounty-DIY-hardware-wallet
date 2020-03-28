@@ -3,7 +3,8 @@ export const SECONDARY_COLOR = '#19a79a';
 export const DANGER_COLOR = SECONDARY_COLOR;
 
 export const { REACT_APP_IS_DEV: IS_DEV } = process.env;
-export const { REACT_APP_INFURA_API_KEY: INFURA_API_KEY } = process.env;
+export const INFURA_API_KEY =
+  process.env.REACT_APP_INFURA_API_KEY || '90b4177113144a0c82b2b64bc01950e1';
 
 export const LOGIC_TYPES_KEYFILE = 'LOGIC_TYPES_KEYFILE';
 export const LOGIC_TYPES_MNEMONIC = 'LOGIC_TYPES_MNEMONIC';
@@ -28,6 +29,7 @@ export const CHAINS = {
     networks: {
       1: { name: 'mainnet', providerUrl: 'https://www.ethercluster.com/etc' },
       6: { name: 'kotti', providerUrl: 'https://www.ethercluster.com/kotti' },
+      // 63: { name: 'kotti', providerUrl: 'https://www.ethercluster.com/mordor' },
     },
   },
 };

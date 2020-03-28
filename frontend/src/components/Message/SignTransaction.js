@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SAMPLE = {
-  to: '0x857C6efC4C19Da78b23C77E0B93d6A5Ecf23f2Cd',
   value: '0.1',
   data: '',
   gasPrice: '0.08',
@@ -113,7 +112,6 @@ const Component = ({ account, passphrase, rpc, web3 }) => {
             shrink: true,
           }}
           placeholder={'0x5678...'}
-          defaultValue={IS_DEV ? SAMPLE.to : ''}
           fullWidth
           required
         />
