@@ -142,7 +142,7 @@ const IndexPage = () => {
           </p>
 
           <p>
-            5. Visit app at{' '}
+            5. Visit frontend at{' '}
             <a href="http://localhost:4444">http://localhost:4444</a>
           </p>
         </div>

@@ -20,6 +20,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
+import CopyIcon from '@material-ui/icons/FileCopy';
 import { isDarkSelector } from 'selectors/theme';
 import { web3Selector } from 'selectors/wallet';
 import { LOGIC_TYPES_MNEMONIC, CHAINS } from 'config';
@@ -72,6 +73,10 @@ function Component({
     }
   };
 
+  const copyAddress = () => {
+    navigator.clipboard.writeText(account);
+  };
+
   React.useEffect(() => {
     onMount(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, web3]);
@@ -97,14 +102,28 @@ function Component({
         &nbsp;
         {!account ? null : (
           <React.Fragment>
+            <Button aria-controls="chain-network" aria-haspopup="true">
+              Network: {chain}({network})
+            </Button>
+
             <Button
               aria-controls="accounts"
               aria-haspopup="true"
               onClick={handleOpenAccounts}
             >
-              Network: {chain}({network}) Account: {account} Balance:{' '}
-              {web3.utils.fromWei(balance, 'ether')} {tokenSymbol}
+              Account: {account} Balance: {web3.utils.fromWei(balance, 'ether')}{' '}
+              {tokenSymbol}
             </Button>
+
+            <Tooltip title="Copy Address">
+              <IconButton
+                color="inherit"
+                aria-label="Copy Address"
+                onClick={copyAddress}
+              >
+                <CopyIcon />
+              </IconButton>
+            </Tooltip>
 
             <Menu
               id="accounts"
