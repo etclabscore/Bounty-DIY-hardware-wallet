@@ -1,4 +1,4 @@
-![](https://siasky.net/vAEov_UffYU0bj_Vg-DyASXGGevpA0pYDXBUFgeNqXSw4Q)
+![](https://siasky.net/PAPvygZIoonwVmSyvDcA-rMhH6or_Y-DlthznjZHARHEwA)
 
 ## The Problem
 
@@ -11,7 +11,7 @@ An Ethereum Wallet GUI powered by [Signatory Server](https://signatory.dev), tha
 - [x] Creates accounts from imported mnemonic phrases or keystore files
 - [x] Allows generation of mnemonic phrases and keystore files
 - [x] Provides ability to sign and verify messages
-- [ ] Provides ability to sign and broadcast transactions
+- [x] Provides ability to sign and broadcast transactions
 
 It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCrypto), an electronjs client for generating ether wallets, handling ERC-20 tokens, and interacting with the blockchain more easily.
 
