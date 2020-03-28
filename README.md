@@ -1,4 +1,4 @@
-![](https://siasky.net/PAPvygZIoonwVmSyvDcA-rMhH6or_Y-DlthznjZHARHEwA)
+![](https://siasky.net/PAMGM9PeehQQWOYCCC7B8ux2go5FgiMIu0gxvSO-0v770A)
 
 ## The Problem
 
