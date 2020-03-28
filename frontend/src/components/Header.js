@@ -21,7 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { isDarkSelector } from 'selectors/theme';
-import { LOGIC_TYPES_MNEMONIC } from 'config';
+import { LOGIC_TYPES_MNEMONIC, CHAINS } from 'config';
 
 function Component({
   toggleTheme,
@@ -32,8 +32,12 @@ function Component({
   chooseAccount,
   logout,
   isMnemonicType,
+  chainId,
+  networkId,
 }) {
   const [accountMenuAnchorEl, setAaccountMenuAnchorEl] = React.useState(null);
+  const { name: chain, networks } = CHAINS[chainId];
+  const network = networks[networkId];
 
   const handleOpenAccounts = event => {
     setAaccountMenuAnchorEl(event.currentTarget);
@@ -84,7 +88,7 @@ function Component({
               aria-haspopup="true"
               onClick={handleOpenAccounts}
             >
-              Account: {account}
+              Network: {chain}({network}) Account: {account}
             </Button>
 
             <Menu
@@ -149,13 +153,15 @@ function Component({
 
 const mapStateToProps = state => {
   const {
-    wallet: { account, accounts, type: loginType },
+    wallet: { account, accounts, type: loginType, chainId, networkId },
   } = state;
   return {
     isDark: isDarkSelector(state),
     account,
     accounts,
     isMnemonicType: loginType !== LOGIC_TYPES_MNEMONIC,
+    chainId,
+    networkId,
   };
 };
 

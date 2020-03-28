@@ -1,11 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as mapDispatchToProps from 'actions';
+import clsx from 'clsx';
+import NProgress from 'nprogress';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Paper } from '@material-ui/core';
-import { IS_DEV } from 'config';
 import { stringToHex, numberToHex } from '@etclabscore/eserialize';
+
+import * as mapDispatchToProps from 'actions';
+import { IS_DEV } from 'config';
 import { toGwei, toWei } from 'utils/wallet';
+import { web3Selector } from 'selectors/wallet';
 
 const useStyles = makeStyles(theme => ({
   result: {
@@ -14,6 +18,11 @@ const useStyles = makeStyles(theme => ({
   row: {
     marginBottom: 20,
   },
+  buttons: {
+    '& > *': {
+      width: 150,
+    },
+  },
 }));
 
 const SAMPLE = {
@@ -21,15 +30,14 @@ const SAMPLE = {
   value: '0.1',
   data: '',
   gasPrice: '0.08',
-  gasLimit: '21000',
+  gasLimit: '23000',
 };
 
-const Component = ({ account, passphrase, chainId, rpc }) => {
+const Component = ({ account, passphrase, networkId, rpc, web3 }) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
-  const nounce = 0;
 
-  const onSubmit = async e => {
+  const onSignTrasaction = async e => {
     e.preventDefault();
 
     setResult(null);
@@ -41,9 +49,8 @@ const Component = ({ account, passphrase, chainId, rpc }) => {
       }
     );
 
-    const chainId = 3;
-
     try {
+      payload.nonce = await web3.eth.getTransactionCount(payload.from);
       const data = stringToHex(payload.data);
       const sig = await rpc(
         'signTransaction',
@@ -57,7 +64,7 @@ const Component = ({ account, passphrase, chainId, rpc }) => {
           data: data === '0x' ? '0x00' : data,
         },
         passphrase,
-        numberToHex(chainId)
+        numberToHex(networkId)
       );
 
       setResult(sig);
@@ -66,8 +73,19 @@ const Component = ({ account, passphrase, chainId, rpc }) => {
     }
   };
 
+  const onBroadcastTrasaction = async() => {
+    setResult('');
+    NProgress.start();
+    NProgress.set(0.4);
+
+    const { transactionHash } = await web3.eth.sendSignedTransaction(result);
+
+    NProgress.done();
+    setResult(transactionHash);
+  };
+
   return (
-    <form {...{ onSubmit }} className="flex flex--column">
+    <form onSubmit={onSignTrasaction} className="flex flex--column">
       <div className={classes.row}>
         <TextField
           id="from"
@@ -152,9 +170,7 @@ const Component = ({ account, passphrase, chainId, rpc }) => {
             shrink: true,
           }}
           placeholder={'0'}
-          defaultValue={nounce.toString()}
           fullWidth
-          required
         />
       </div>
 
@@ -172,12 +188,18 @@ const Component = ({ account, passphrase, chainId, rpc }) => {
         />
       </div>
 
-      <div className={classes.row}>
+      <div className={clsx(classes.row, classes.buttons)}>
         <Button type="submit" variant="contained" color="secondary">
           Sign
         </Button>
-        &nbsp; &nbsp;
-        <Button type="submit" variant="contained" color="secondary" disabled>
+        &nbsp;
+        <Button
+          type="button"
+          variant="contained"
+          color="secondary"
+          disabled={!result}
+          onClick={onBroadcastTrasaction}
+        >
           Broadcast
         </Button>
       </div>
@@ -193,9 +215,9 @@ const Component = ({ account, passphrase, chainId, rpc }) => {
   );
 };
 
-export default connect(
-  ({ wallet: { account, passphrase, chainId } }, { match }) => {
-    return { account, passphrase, chainId };
-  },
-  mapDispatchToProps
-)(Component);
+export default connect((state, { match }) => {
+  const {
+    wallet: { account, passphrase, chainId, networkId },
+  } = state;
+  return { account, passphrase, chainId, networkId, web3: web3Selector(state) };
+}, mapDispatchToProps)(Component);

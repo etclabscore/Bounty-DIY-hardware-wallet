@@ -7,8 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import Sign from './Sign';
 import Verify from './Verify';
 import SignTransaction from './SignTransaction';
-// import BroadcastSignedTransaction from './BroadcastSignedTransaction';
-import BroadcastSignedTransaction from 'components/WIP';
+import BroadcastSignedTransaction from './BroadcastSignedTransaction';
 import { history } from 'store';
 
 const useStyles = makeStyles(theme => ({

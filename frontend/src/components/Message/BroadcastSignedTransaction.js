@@ -1,29 +1,39 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as mapDispatchToProps from 'actions';
+import NProgress from 'nprogress';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Paper } from '@material-ui/core';
 
+import * as mapDispatchToProps from 'actions';
+import { web3Selector } from 'selectors/wallet';
+
 const useStyles = makeStyles(theme => ({
   result: {
-    padding: 20,
+    wordBreak: 'break-all',
   },
   row: {
     marginBottom: 20,
   },
 }));
 
-const Component = ({ account, passphrase, rpc }) => {
+const Component = ({ web3, networkId }) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
 
   const onSubmit = async e => {
     e.preventDefault();
 
-    setResult(null);
+    setResult('');
+    NProgress.start();
+    NProgress.set(0.4);
 
     const signedTransaction = (e.target.signedTransaction.value ?? '').trim();
-    console.log(signedTransaction);
+    const { transactionHash } = await web3.eth.sendSignedTransaction(
+      signedTransaction
+    );
+
+    NProgress.done();
+    setResult(transactionHash);
   };
 
   return (
@@ -60,6 +70,9 @@ const Component = ({ account, passphrase, rpc }) => {
   );
 };
 
-export default connect(({ wallet: { account, passphrase } }, { match }) => {
-  return { account, passphrase };
+export default connect((state, { match }) => {
+  const {
+    wallet: { networkId },
+  } = state;
+  return { networkId, web3: web3Selector(state) };
 }, mapDispatchToProps)(Component);

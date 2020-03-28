@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -10,11 +9,13 @@ import {
   FormControl,
   InputLabel,
 } from '@material-ui/core';
+import { CHAINS } from 'config';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
 import clsx from 'clsx';
 import cache from 'utils/cache';
+import * as string from 'utils/string';
 
 const useStyles = makeStyles(theme => ({
   container: { width: 800 },
@@ -38,28 +39,29 @@ function Component({
   updateWallet,
   signatoryServerUrl,
   chainId,
+  networkId,
   history,
 }) {
   const classes = useStyles();
   const query = qs.parse(window.location.search.replace('?', ''));
   const backTo = query['back-to'] || '/';
-  const [formData, setFormData] = React.useState({ chainId });
+  const [formData, setFormData] = React.useState({ chainId, networkId });
 
-  const handleChange = (event, fmt = _.identity) => {
-    const { name, value } = event.target;
+  const handleFormDataChange = data => {
     setFormData({
       ...formData,
-      [name]: fmt(value),
+      ...data,
     });
   };
 
   const onSubmit = async e => {
     e.preventDefault();
     const signatoryServerUrl = (e.target.signatoryServerUrl.value ?? '').trim();
-    const { chainId } = formData;
+    const { chainId, networkId } = formData;
     cache('signatoryServerUrl', signatoryServerUrl);
     cache('chainId', chainId);
-    updateWallet({ chainId, signatoryServerUrl });
+    cache('networkId', networkId);
+    updateWallet({ chainId, networkId, signatoryServerUrl });
     history.push(backTo);
   };
 
@@ -96,15 +98,48 @@ function Component({
             </InputLabel>
             <NativeSelect
               value={formData.chainId}
-              onChange={e => handleChange(e, parseInt)}
+              onChange={e =>
+                handleFormDataChange({
+                  chainId: parseInt(e.target.value),
+                  networkId: 1,
+                })
+              }
               inputProps={{
                 name: 'chainId',
                 id: 'chainId',
               }}
               fullWidth
             >
-              <option value={61}>Ethereum Classic</option>
-              <option value={1}>Ethereum</option>
+              {Object.entries(CHAINS).map(([id, { name }]) => (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              ))}
+            </NativeSelect>
+          </FormControl>
+
+          <FormControl className={classes.row}>
+            <InputLabel shrink htmlFor="age-native-label-placeholder">
+              Network*
+            </InputLabel>
+            <NativeSelect
+              value={formData.networkId}
+              onChange={e =>
+                handleFormDataChange({ networkId: parseInt(e.target.value) })
+              }
+              inputProps={{
+                name: 'networkId',
+                id: 'networkId',
+              }}
+              fullWidth
+            >
+              {Object.entries(CHAINS[formData.chainId].networks).map(
+                ([id, name]) => (
+                  <option key={id} value={id}>
+                    {string.toTitleCase(name)}
+                  </option>
+                )
+              )}
             </NativeSelect>
           </FormControl>
 

@@ -1,5 +1,5 @@
 import NProgress from 'nprogress';
-import { rpcClient } from 'selectors/xhr';
+import { rpcClientSelector } from 'selectors/xhr';
 // import { ERR_UNKNOWN } from '@open-rpc/client-js';
 import { history } from 'store';
 import sl from 'utils/sl';
@@ -10,7 +10,7 @@ export function rpc(method, ...payload) {
     NProgress.set(0.4);
 
     const state = getState();
-    const client = rpcClient(state);
+    const client = rpcClientSelector(state);
 
     try {
       const result = await client.request(method, payload);

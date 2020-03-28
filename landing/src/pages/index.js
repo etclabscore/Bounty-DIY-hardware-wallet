@@ -124,7 +124,8 @@ const IndexPage = () => {
             2. Clone repo
             <br />
             <code>
-              $ git clone https://github.com/vbstreetz/signatory-client
+              $ git clone https://github.com/vbstreetz/signatory-client <br />$
+              cd signatory-client
             </code>
           </p>
 
