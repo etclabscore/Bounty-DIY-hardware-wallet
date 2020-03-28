@@ -21,6 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { isDarkSelector } from 'selectors/theme';
+import { web3Selector } from 'selectors/wallet';
 import { LOGIC_TYPES_MNEMONIC, CHAINS } from 'config';
 
 function Component({
@@ -34,10 +35,13 @@ function Component({
   isMnemonicType,
   chainId,
   networkId,
+  web3,
 }) {
   const [accountMenuAnchorEl, setAaccountMenuAnchorEl] = React.useState(null);
-  const { name: chain, networks } = CHAINS[chainId];
-  const network = networks[networkId];
+  const [balance, setBalance] = React.useState('0');
+
+  const { name: chain, networks, tokenSymbol } = CHAINS[chainId];
+  const { name: network } = networks[networkId];
 
   const handleOpenAccounts = event => {
     setAaccountMenuAnchorEl(event.currentTarget);
@@ -61,6 +65,16 @@ function Component({
     handleCloseAccounts();
     logout();
   };
+
+  const onMount = async() => {
+    if (account) {
+      setBalance(await web3.eth.getBalance(account));
+    }
+  };
+
+  React.useEffect(() => {
+    onMount(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, web3]);
 
   return (
     <AppBar position="fixed" color="inherit">
@@ -88,7 +102,8 @@ function Component({
               aria-haspopup="true"
               onClick={handleOpenAccounts}
             >
-              Network: {chain}({network}) Account: {account}
+              Network: {chain}({network}) Account: {account} Balance:{' '}
+              {web3.utils.fromWei(balance, 'ether')} {tokenSymbol}
             </Button>
 
             <Menu
@@ -162,6 +177,7 @@ const mapStateToProps = state => {
     isMnemonicType: loginType !== LOGIC_TYPES_MNEMONIC,
     chainId,
     networkId,
+    web3: web3Selector(state),
   };
 };
 

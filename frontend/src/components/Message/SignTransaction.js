@@ -8,7 +8,6 @@ import { stringToHex, numberToHex } from '@etclabscore/eserialize';
 
 import * as mapDispatchToProps from 'actions';
 import { IS_DEV } from 'config';
-import { toGwei, toWei } from 'utils/wallet';
 import { web3Selector } from 'selectors/wallet';
 
 const useStyles = makeStyles(theme => ({
@@ -33,7 +32,7 @@ const SAMPLE = {
   gasLimit: '23000',
 };
 
-const Component = ({ account, passphrase, networkId, rpc, web3 }) => {
+const Component = ({ account, passphrase, rpc, web3 }) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
 
@@ -50,6 +49,8 @@ const Component = ({ account, passphrase, networkId, rpc, web3 }) => {
     );
 
     try {
+      const networkId = await web3.eth.net.getId();
+      console.log('network(%s)', networkId);
       payload.nonce = await web3.eth.getTransactionCount(payload.from);
       const data = stringToHex(payload.data);
       const sig = await rpc(
@@ -57,10 +58,12 @@ const Component = ({ account, passphrase, networkId, rpc, web3 }) => {
         {
           from: payload.from,
           nonce: numberToHex(parseInt(payload.nonce)),
-          gas: numberToHex(parseFloat(payload.gasLimit)),
-          gasPrice: numberToHex(toGwei(parseFloat(payload.gasPrice))),
+          gas: numberToHex(parseInt(payload.gasLimit)),
+          gasPrice: web3.utils.toHex(
+            web3.utils.toWei(payload.gasPrice, 'gwei')
+          ),
           to: payload.to,
-          value: numberToHex(toWei(parseFloat(payload.value))),
+          value: web3.utils.toHex(web3.utils.toWei(payload.value, 'ether')),
           data: data === '0x' ? '0x00' : data,
         },
         passphrase,
@@ -69,7 +72,7 @@ const Component = ({ account, passphrase, networkId, rpc, web3 }) => {
 
       setResult(sig);
     } catch (e) {
-      console.log(JSON.stringify(e.data, null, 2));
+      console.log(JSON.stringify(e.data, null, 2) || e.message);
     }
   };
 

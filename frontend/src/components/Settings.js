@@ -134,7 +134,7 @@ function Component({
               fullWidth
             >
               {Object.entries(CHAINS[formData.chainId].networks).map(
-                ([id, name]) => (
+                ([id, { name }]) => (
                   <option key={id} value={id}>
                     {string.toTitleCase(name)}
                   </option>
