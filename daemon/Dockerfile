@@ -3,7 +3,7 @@ FROM node:10.18.0
 WORKDIR /tmp
 
 ADD package.json .
-RUN yarn install --prod
+RUN yarn install --prod --network-timeout 100000
 # && \
 #  cd /tmp/node_modules/\@etclabscore/signatory/ && \
 #  npm run build && \
