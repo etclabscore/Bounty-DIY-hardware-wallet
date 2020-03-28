@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  client:
+    build:
+      context: ./frontend
+      dockerfile: DockerfileDev
+    command: yarn start
+    environment:
+      NODE_PATH: ./src
+      REACT_APP_IS_DEV: 1
+      REACT_APP_INFURA_API_KEY: "${REACT_APP_INFURA_API_KEY}"
+    volumes:
+      - ./frontend:/tmp
+      - /tmp/node_modules
+    ports:
+      - "${PORT}:3000"
+
+  server:
+    build: ./daemon
+    command: yarn start
+    ports:
+      - 1999:1999

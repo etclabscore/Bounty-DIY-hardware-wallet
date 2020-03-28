@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  client:
+    build:
+      context: ./frontend
+      dockerfile: DockerfileRelease
+    image: vbstreetz/sc-frontend:latest
+    command: ./docker-release.sh
+    volumes:
+      - www:/var/www
+    environment:
+      NODE_PATH: ./src
+      REACT_APP_INFURA_API_KEY: "${REACT_APP_INFURA_API_KEY}"
+
+  server:
+    build: ./daemon
+    image: vbstreetz/sc-daemon:latest
+    command: yarn start
+    ports:
+      - 1999:1999
+
+  nginx:
+    build: .
+    image: vbstreetz/sc-nginx:latest
+    ports:
+      - "${PORT}:80"
+    volumes:
+      - www:/var/www
+
+volumes:
+  www:
+    driver: local

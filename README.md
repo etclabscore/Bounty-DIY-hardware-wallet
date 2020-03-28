@@ -23,11 +23,9 @@ It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCryp
 
 3. Clone this repo and run:
 
-   \$ make
+   \$ make release
 
 4. Visit app at http://localhost:4444
-
-If you install the client on a remote node like a single-board computer, be sure to update the server location in settings.
 
 ## Contributing
 
