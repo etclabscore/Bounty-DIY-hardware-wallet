@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  client:
+  frontend:
     image: vbstreetz/sc-frontend:latest
     command: ./docker-release.sh
     volumes:
@@ -10,7 +10,7 @@ services:
       NODE_PATH: ./src
       REACT_APP_INFURA_API_KEY: "${REACT_APP_INFURA_API_KEY}"
 
-  server:
+  daemon:
     image: vbstreetz/sc-daemon:latest
     command: yarn start
     ports:

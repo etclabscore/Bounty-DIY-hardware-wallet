@@ -138,7 +138,7 @@ const IndexPage = () => {
           <p>
             4. Boot server and frontend
             <br />
-            <code>$ make build</code>
+            <code>$ make run</code>
           </p>
 
           <p>

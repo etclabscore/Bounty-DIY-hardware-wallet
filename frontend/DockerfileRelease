@@ -5,7 +5,9 @@ WORKDIR /tmp
 ADD package.json package.json
 RUN yarn install --unsafe-perm --network-timeout 100000
 
+ARG NODE_PATH
+ARG REACT_APP_INFURA_API_KEY
 ADD src src
 ADD public public
 ADD ./docker-release.sh ./docker-release.sh
-RUN NODE_PATH=./src npm run build
+RUN npm run build

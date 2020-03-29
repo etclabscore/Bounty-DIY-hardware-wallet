@@ -23,7 +23,7 @@ It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCryp
 
 3. Clone this repo and run:
 
-   \$ make build
+   \$ make run
 
 4. Visit app at http://localhost:4444
 

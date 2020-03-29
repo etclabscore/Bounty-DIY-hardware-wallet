@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  client:
+  frontend:
     build:
       context: ./frontend
       dockerfile: DockerfileDev
@@ -16,7 +16,7 @@ services:
     ports:
       - "${PORT}:3000"
 
-  server:
+  daemon:
     build: ./daemon
     command: yarn start
     ports:

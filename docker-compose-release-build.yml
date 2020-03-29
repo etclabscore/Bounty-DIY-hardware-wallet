@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  client:
+  frontend:
     build:
       context: ./frontend
       dockerfile: DockerfileRelease
@@ -10,10 +10,9 @@ services:
     volumes:
       - www:/var/www
     environment:
-      NODE_PATH: ./src
-      REACT_APP_INFURA_API_KEY: "${REACT_APP_INFURA_API_KEY}"
+      REACT_APP_INFURA_API_KEY: "${INFURA_API_KEY}"
 
-  server:
+  daemon:
     build: ./daemon
     image: vbstreetz/sc-daemon:latest
     command: yarn start
