@@ -9,5 +9,4 @@ ARG NODE_PATH
 ARG REACT_APP_INFURA_API_KEY
 ADD src src
 ADD public public
-ADD ./docker-release.sh ./docker-release.sh
 RUN npm run build
