@@ -46,6 +46,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "client": "./node_modules/.bin/serve ./build -s",
     "server": "./node_modules/.bin/signatory -d ./data"
   },
   "eslintConfig": {

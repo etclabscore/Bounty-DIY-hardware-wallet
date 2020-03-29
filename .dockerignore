@@ -1,5 +1,9 @@
-node_modules
 .git
+.github
 build
-yarn--*
+landing
+node_modules
+test
 v8-*
+yarn--*
+data
