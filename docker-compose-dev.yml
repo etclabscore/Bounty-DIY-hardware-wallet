@@ -1,27 +1,23 @@
-version: '2'
+version: '2.4'
 
 services:
   client:
     build:
       context: ./
       dockerfile: DockerfileDev
-    image: vbstreetz/signatory-client:latest
+    image: vbstreetz/signatory-client-dev:latest
     command: yarn start
     environment:
-      NODE_PATH: ./src
       REACT_APP_IS_DEV: 1
-      REACT_APP_INFURA_API_KEY: '${REACT_APP_INFURA_API_KEY}'
+      REACT_APP_INFURA_API_KEY: '${INFURA_API_KEY}'
     volumes:
       - ./:/tmp
       - /tmp/node_modules
     ports:
-      - '${PORT}:3000'
+      - '${PORT}:4444'
 
   server:
-    build:
-      context: ./
-      dockerfile: DockerfileDev
-    image: vbstreetz/signatory-client:latest
+    image: vbstreetz/signatory-client-dev:latest
     command: yarn server
     ports:
       - 1999:1999

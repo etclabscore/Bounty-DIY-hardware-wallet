@@ -1,12 +1,14 @@
-FROM node:10.18.0
+FROM node:10.18.0 AS builder
 
 WORKDIR /tmp
 
 ADD package.json package.json
-RUN yarn install --unsafe-perm --network-timeout 100000
+ADD yarn.lock yarn.lock
+RUN yarn install --unsafe-perm --network-timeout 100000 --verbose
 
 ARG NODE_PATH
 ARG REACT_APP_INFURA_API_KEY
 ADD src src
 ADD public public
-RUN npm run build
+ADD jsconfig.json jsconfig.json
+RUN REACT_APP_INFURA_API_KEY=$REACT_APP_INFURA_API_KEY npm run build
