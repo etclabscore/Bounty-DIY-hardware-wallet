@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import NProgress from 'nprogress';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Paper } from '@material-ui/core';
+import { TextField, Button, Paper, Tooltip } from '@material-ui/core';
+import LaunchIcon from '@material-ui/icons/Launch';
 import { stringToHex, numberToHex } from '@etclabscore/eserialize';
 
 import sl from 'utils/sl';
 import * as mapDispatchToProps from 'actions';
-import { IS_DEV, CHAINS_MAP, NETWORKS_MAP } from 'config';
+import { IS_DEV, CHAINS_MAP, NETWORKS_MAP, SECONDARY_COLOR } from 'config';
 import { web3Selector } from 'selectors/wallet';
 
 const useStyles = makeStyles(theme => ({
@@ -23,6 +24,12 @@ const useStyles = makeStyles(theme => ({
       width: 150,
     },
   },
+  transactionLink: {
+    color: SECONDARY_COLOR,
+    '& > svg': {
+      marginLeft: 5,
+    },
+  },
 }));
 
 const SAMPLE = {
@@ -35,9 +42,10 @@ const SAMPLE = {
 const Component = ({ from, to, passphrase, rpc, web3, network }) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
-  const { tokenSymbol } = CHAINS_MAP[NETWORKS_MAP[network].chain];
+  const n = NETWORKS_MAP[network];
+  const { tokenSymbol } = CHAINS_MAP[n.chain];
 
-  const onSignTrasaction = async e => {
+  const onSignTransaction = async e => {
     e.preventDefault();
 
     setResult(null);
@@ -53,7 +61,7 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
       payload.nonce = parseInt(payload.nonce) ?? await web3.eth.getTransactionCount(payload.from);
 
       const data = stringToHex(payload.data);
-      const sig = await rpc(
+      const transactionSig = await rpc(
         'signTransaction',
         {
           from: payload.from,
@@ -70,20 +78,22 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
         numberToHex(await web3.eth.getChainId())
       );
 
-      setResult(sig);
+      setResult({ transactionSig });
     } catch (e) {
       console.log(JSON.stringify(e.data, null, 2) || e.message);
     }
   };
 
-  const onBroadcastTrasaction = async() => {
-    setResult('');
+  const onBroadcastTransaction = async () => {
+    setResult(null);
     NProgress.start();
     NProgress.set(0.4);
 
     try {
-      const { transactionHash } = await web3.eth.sendSignedTransaction(result);
-      setResult(transactionHash);
+      const { transactionHash } = await web3.eth.sendSignedTransaction(
+        result.transactionSig
+      );
+      setResult({ transactionHash });
     } catch (e) {
       sl('error', e.message);
     } finally {
@@ -92,7 +102,7 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
   };
 
   return (
-    <form onSubmit={onSignTrasaction} className="flex flex--column">
+    <form onSubmit={onSignTransaction} className="flex flex--column">
       <div className={classes.row}>
         <TextField
           id="from"
@@ -205,7 +215,7 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
           variant="contained"
           color="secondary"
           disabled={!result}
-          onClick={onBroadcastTrasaction}
+          onClick={onBroadcastTransaction}
         >
           Broadcast
         </Button>
@@ -214,7 +224,23 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
       {!result ? null : (
         <div className={classes.row}>
           <Paper elevation={0} className={classes.result}>
-            {result}
+            {!result.transactionSig ? null : result.transactionSig}
+            {!result.transactionHash ? null : (
+              <Tooltip title="View transaction in blockexplorer">
+                <a
+                  href={n.explorerBaseDomain + result.transactionHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx(
+                    classes.transactionLink,
+                    'flex',
+                    'flex--align-center'
+                  )}
+                >
+                  {result.transactionHash} <LaunchIcon />
+                </a>
+              </Tooltip>
+            )}
           </Paper>
         </div>
       )}

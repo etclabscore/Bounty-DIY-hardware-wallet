@@ -1,3 +1,9 @@
+client:
+	@yarn start
+
+server:
+	@yarn $@
+
 dev:
 	@docker-compose -f docker-compose-dev.yml -p sc-dev up --build
 
@@ -11,4 +17,4 @@ run:
 push:
 	@docker-compose -f docker-compose-build.yml -p sc-build push
 
-.PHONY: push run build dev
+.PHONY: push run build dev server client

@@ -16,11 +16,20 @@ export const CHAINS_MAP = {};
 CHAINS_LIST.forEach(c => (CHAINS_MAP[c.id] = c));
 
 export const ETC_NETWORKS = [
-  { name: 'mainnet', providerUrl: 'https://www.ethercluster.com/etc' },
-  { name: 'kotti', providerUrl: 'https://www.ethercluster.com/kotti' },
+  {
+    name: 'mainnet',
+    providerUrl: 'https://www.ethercluster.com/etc',
+    explorerBaseDomain: 'https://classic.etccoopexplorer.com/tx/',
+  },
+  {
+    name: 'kotti',
+    providerUrl: 'https://www.ethercluster.com/kotti',
+    explorerBaseDomain: 'https://kotti.etccoopexplorer.com/tx/',
+  },
   {
     name: 'mordor',
     providerUrl: 'https://www.ethercluster.com/mordor',
+    explorerBaseDomain: `https://mordor.etccoopexplorer.com/tx/`,
   },
 ].map(n => ({ ...n, id: `etc-${n.name}`, chain: 'etc' }));
 
@@ -35,6 +44,9 @@ export const ETH_NETWORKS = [
   name,
   chain: 'eth',
   providerUrl: `https://${name}.infura.io/v3/`,
+  explorerBaseDomain: `https://${
+    'mainnet' === name ? '' : `${name}.`
+  }etherscan.io/tx/`,
 }));
 
 export const NETWORKS_LIST = [...ETC_NETWORKS, ...ETH_NETWORKS];
