@@ -50,7 +50,8 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
     );
 
     try {
-      payload.nonce = await web3.eth.getTransactionCount(payload.from);
+      payload.nonce = parseInt(payload.nonce) ?? await web3.eth.getTransactionCount(payload.from);
+
       const data = stringToHex(payload.data);
       const sig = await rpc(
         'signTransaction',
