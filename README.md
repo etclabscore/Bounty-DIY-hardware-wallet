@@ -31,7 +31,7 @@ It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCryp
 
 ## Video Demo
 
-https://youtu.be/G_I-pEhTmmo
+https://youtu.be/g6LZ1osKw8k
 
 ## Contributing
 
