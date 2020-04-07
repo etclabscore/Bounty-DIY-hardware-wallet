@@ -1,14 +1,15 @@
-import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import NProgress from 'nprogress';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Paper, Tooltip } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import LaunchIcon from '@material-ui/icons/Launch';
 import { stringToHex, numberToHex } from '@etclabscore/eserialize';
 
 import sl from 'utils/sl';
+import { sleep } from 'utils';
 import * as mapDispatchToProps from 'actions';
 import { IS_DEV, CHAINS_MAP, NETWORKS_MAP, SECONDARY_COLOR } from 'config';
 import { web3Selector } from 'selectors/wallet';
@@ -40,11 +41,31 @@ const SAMPLE = {
   gasLimit: '23000',
 };
 
-const Component = ({ from, to, passphrase, rpc, web3, network }) => {
+const Component = ({
+  from,
+  accounts,
+  passphrase,
+  rpc,
+  web3,
+  network,
+  updateWallet,
+}) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
+  const [to, setTo] = React.useState('');
+  const [nonce, setNonce] = React.useState(0);
   const n = NETWORKS_MAP[network];
   const { tokenSymbol } = CHAINS_MAP[n.chain];
+
+  const updateNonce = async () => {
+    setNonce(await web3.eth.getTransactionCount(from));
+  };
+
+  React.useEffect(() => {
+    updateNonce(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [from]);
+
+  //
 
   const onSignTransaction = async e => {
     e.preventDefault();
@@ -52,28 +73,22 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
     setResult(null);
 
     const payload = {};
-    ['from', 'to', 'value', 'gasLimit', 'gasPrice', 'nonce', 'data'].forEach(
-      k => {
-        payload[k] = (e.target[k].value ?? '').trim();
-      }
-    );
+    ['value', 'gasLimit', 'gasPrice', 'nonce', 'data'].forEach(k => {
+      payload[k] = (e.target[k].value ?? '').trim();
+    });
 
     try {
-      payload.nonce = parseInt(payload.nonce);
-      if (_.isNaN(payload.nonce)) {
-        payload.nonce = await web3.eth.getTransactionCount(payload.from);
-      }
       const data = stringToHex(payload.data);
       const transactionSig = await rpc(
         'signTransaction',
         {
-          from: payload.from,
-          nonce: numberToHex(payload.nonce),
+          from,
+          nonce: numberToHex(nonce),
           gas: numberToHex(parseInt(payload.gasLimit)),
           gasPrice: web3.utils.toHex(
             web3.utils.toWei(payload.gasPrice, 'gwei')
           ),
-          to: payload.to,
+          to,
           value: web3.utils.toHex(web3.utils.toWei(payload.value, 'ether')),
           data: data === '0x' ? '0x00' : data,
         },
@@ -97,6 +112,9 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
         result.transactionSig
       );
       setResult({ transactionHash });
+      await updateNonce();
+      await sleep(1000);
+      updateWallet({ latestTxnHash: transactionHash });
     } catch (e) {
       sl('error', e.message);
     } finally {
@@ -115,24 +133,32 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
             shrink: true,
           }}
           placeholder={'0x1234...'}
-          defaultValue={from || ''}
+          disabled
+          value={from}
           fullWidth
           required
         />
       </div>
 
       <div className={classes.row}>
-        <TextField
-          id="to"
-          label="To Address"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          placeholder={'0x5678...'}
-          defaultValue={to || ''}
-          fullWidth
-          required
+        <Autocomplete
+          id="to-autocomplete"
+          options={accounts.filter(a => a !== from)}
+          onChange={(e, value) => setTo(value)}
+          renderInput={params => (
+            <TextField
+              {...params}
+              id="to"
+              label="To Address"
+              type="text"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              placeholder={'0x5678...'}
+              fullWidth
+              required
+            />
+          )}
         />
       </div>
 
@@ -189,7 +215,8 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
           InputLabelProps={{
             shrink: true,
           }}
-          placeholder={'0'}
+          value={nonce}
+          disabled
           fullWidth
         />
       </div>
@@ -251,13 +278,13 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
   );
 };
 
-export default connect((state, { match }) => {
+export default connect(state => {
   const {
     wallet: { account, accounts, passphrase, network },
   } = state;
   return {
+    accounts,
     from: account,
-    to: accounts[1],
     passphrase,
     network,
     web3: web3Selector(state),

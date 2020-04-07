@@ -44,6 +44,7 @@ function Component({
   network,
   web3,
   updateWallet,
+  latestTxnHash,
 }) {
   const [accountMenuAnchorEl, setAaccountMenuAnchorEl] = React.useState(null);
   const [networkMenuAnchorEl, setNerworkMenuAnchorEl] = React.useState(null);
@@ -99,7 +100,7 @@ function Component({
     copyToClipboard(account);
   };
 
-  const onMount = async () => {
+  const onFetchBalance = async () => {
     if (account) {
       console.log('chain(%s)', await web3.eth.getChainId());
       setBalance(await web3.eth.getBalance(account));
@@ -107,8 +108,8 @@ function Component({
   };
 
   React.useEffect(() => {
-    onMount(); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, web3]);
+    onFetchBalance(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, web3, latestTxnHash]);
 
   return (
     <AppBar position="fixed" color="inherit">
@@ -246,7 +247,7 @@ function Component({
 
 const mapStateToProps = state => {
   const {
-    wallet: { account, accounts, type: loginType, network },
+    wallet: { account, accounts, type: loginType, network, latestTxnHash },
   } = state;
   return {
     isDark: isDarkSelector(state),
@@ -255,6 +256,7 @@ const mapStateToProps = state => {
     isMnemonicType: loginType !== LOGIC_TYPES_MNEMONIC,
     network,
     web3: web3Selector(state),
+    latestTxnHash,
   };
 };
 

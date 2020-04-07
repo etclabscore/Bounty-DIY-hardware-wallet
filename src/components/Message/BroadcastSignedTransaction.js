@@ -2,10 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import NProgress from 'nprogress';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Paper } from '@material-ui/core';
+import clsx from 'clsx';
+import LaunchIcon from '@material-ui/icons/Launch';
+import { TextField, Button, Paper, Tooltip } from '@material-ui/core';
 
+import sl from 'utils/sl';
+import { sleep } from 'utils';
 import * as mapDispatchToProps from 'actions';
 import { web3Selector } from 'selectors/wallet';
+import { NETWORKS_MAP, SECONDARY_COLOR } from 'config';
 
 const useStyles = makeStyles(theme => ({
   result: {
@@ -14,33 +19,51 @@ const useStyles = makeStyles(theme => ({
   row: {
     marginBottom: 20,
   },
+  buttons: {
+    '& > *': {
+      width: 150,
+    },
+  },
+  transactionLink: {
+    color: SECONDARY_COLOR,
+    '& > svg': {
+      marginLeft: 5,
+    },
+  },
 }));
 
-const Component = ({ web3 }) => {
+const Component = ({ web3, network, updateWallet }) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
+  const n = NETWORKS_MAP[network];
 
-  const onSubmit = async e => {
+  const onBroadcastTransaction = async e => {
     e.preventDefault();
 
-    setResult('');
+    setResult(null);
     NProgress.start();
     NProgress.set(0.4);
 
-    const signedTransaction = (e.target.signedTransaction.value ?? '').trim();
-    const { transactionHash } = await web3.eth.sendSignedTransaction(
-      signedTransaction
-    );
-
-    NProgress.done();
-    setResult(transactionHash);
+    try {
+      const transactionSig = (e.target.transactionSig.value ?? '').trim();
+      const { transactionHash } = await web3.eth.sendSignedTransaction(
+        transactionSig
+      );
+      setResult({ transactionHash });
+      await sleep(1000);
+      updateWallet({ latestTxnHash: transactionHash });
+    } catch (e) {
+      sl('error', e.message);
+    } finally {
+      NProgress.done();
+    }
   };
 
   return (
-    <form {...{ onSubmit }} className="flex flex--column">
+    <form onSubmit={onBroadcastTransaction} className="flex flex--column">
       <div className={classes.row}>
         <TextField
-          id="signedTransaction"
+          id="transactionSig"
           label="Signed Transaction"
           type="text"
           InputLabelProps={{
@@ -62,7 +85,22 @@ const Component = ({ web3 }) => {
       {!result ? null : (
         <div className={classes.row}>
           <Paper elevation={0} className={classes.result}>
-            {result}
+            {!result.transactionHash ? null : (
+              <Tooltip title="View transaction in blockexplorer">
+                <a
+                  href={n.explorerBaseDomain + result.transactionHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx(
+                    classes.transactionLink,
+                    'flex',
+                    'flex--align-center'
+                  )}
+                >
+                  {result.transactionHash} <LaunchIcon />
+                </a>
+              </Tooltip>
+            )}
           </Paper>
         </div>
       )}
@@ -70,6 +108,9 @@ const Component = ({ web3 }) => {
   );
 };
 
-export default connect((state, { match }) => {
-  return { web3: web3Selector(state) };
+export default connect(state => {
+  const {
+    wallet: { network },
+  } = state;
+  return { web3: web3Selector(state), network };
 }, mapDispatchToProps)(Component);
