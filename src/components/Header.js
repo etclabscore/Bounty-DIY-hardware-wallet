@@ -24,6 +24,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import CopyIcon from '@material-ui/icons/FileCopy';
 import { isDarkSelector } from 'selectors/theme';
 import { web3Selector } from 'selectors/wallet';
+import cache from 'utils/cache';
 import {
   LOGIC_TYPES_MNEMONIC,
   CHAINS_MAP,
@@ -61,7 +62,7 @@ function Component({
     setAaccountMenuAnchorEl(null);
   };
 
-  const handleAddAccount = async() => {
+  const handleAddAccount = async () => {
     await addAccount();
     handleCloseAccounts();
   };
@@ -83,6 +84,7 @@ function Component({
 
   const handleChooseNetwork = async network => {
     updateWallet({ network });
+    cache('network', network);
     handleCloseNetworks();
   };
 
@@ -97,7 +99,7 @@ function Component({
     copyToClipboard(account);
   };
 
-  const onMount = async() => {
+  const onMount = async () => {
     if (account) {
       console.log('chain(%s)', await web3.eth.getChainId());
       setBalance(await web3.eth.getBalance(account));

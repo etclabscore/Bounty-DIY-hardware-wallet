@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
@@ -58,16 +59,16 @@ const Component = ({ from, to, passphrase, rpc, web3, network }) => {
     );
 
     try {
-      payload.nonce =
-        parseInt(payload.nonce) ??
-        (await web3.eth.getTransactionCount(payload.from));
-
+      payload.nonce = parseInt(payload.nonce);
+      if (_.isNaN(payload.nonce)) {
+        payload.nonce = await web3.eth.getTransactionCount(payload.from);
+      }
       const data = stringToHex(payload.data);
       const transactionSig = await rpc(
         'signTransaction',
         {
           from: payload.from,
-          nonce: numberToHex(parseInt(payload.nonce)),
+          nonce: numberToHex(payload.nonce),
           gas: numberToHex(parseInt(payload.gasLimit)),
           gasPrice: web3.utils.toHex(
             web3.utils.toWei(payload.gasPrice, 'gwei')
