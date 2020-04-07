@@ -16,3 +16,5 @@ services:
     command: ./node_modules/.bin/signatory -d ./data
     ports:
       - 1999:1999
+    volumes:
+      - "./data:/tmp/data"

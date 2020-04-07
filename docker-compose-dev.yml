@@ -21,3 +21,5 @@ services:
     command: yarn server
     ports:
       - 1999:1999
+    volumes:
+      - "./data:/tmp/data"
