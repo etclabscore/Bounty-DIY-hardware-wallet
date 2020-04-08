@@ -11,7 +11,7 @@ build:
 	@docker-compose -f docker-compose-build.yml -p sc-build build
 
 run:
-	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -s --all
+	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -s --all | xargs echo
 	@docker pull vbstreetz/signatory-client:latest
 	@docker rmi `docker images | grep "vbstreetz" | grep "<none>" | awk '{print $$3}'` | xargs echo
 	@docker-compose -f docker-compose-release.yml -p sc-release up -d
