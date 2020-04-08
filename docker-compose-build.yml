@@ -17,4 +17,4 @@ services:
     ports:
       - 1999:1999
     volumes:
-      - "./data:/tmp/data"
+      - "./data:/data"
