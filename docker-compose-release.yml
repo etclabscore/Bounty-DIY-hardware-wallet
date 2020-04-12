@@ -1,4 +1,4 @@
-version: '2.4'
+version: '2.1'
 
 services:
   client:
@@ -13,4 +13,4 @@ services:
     ports:
       - 1999:1999
     volumes:
-      - "./data:/tmp/data"
+      - "./data:/data"

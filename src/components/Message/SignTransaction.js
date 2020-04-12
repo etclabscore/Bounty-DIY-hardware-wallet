@@ -49,6 +49,7 @@ const Component = ({
   web3,
   network,
   updateWallet,
+  latestTxnHash,
 }) => {
   const classes = useStyles();
   const [result, setResult] = React.useState(null);
@@ -57,13 +58,15 @@ const Component = ({
   const n = NETWORKS_MAP[network];
   const { tokenSymbol } = CHAINS_MAP[n.chain];
 
+  const getNounce = () => web3.eth.getTransactionCount(from);
+
   const updateNonce = async () => {
-    setNonce(await web3.eth.getTransactionCount(from));
+    setNonce(await getNounce());
   };
 
   React.useEffect(() => {
     updateNonce(); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from]);
+  }, [from, network, latestTxnHash]);
 
   //
 
@@ -83,7 +86,7 @@ const Component = ({
         'signTransaction',
         {
           from,
-          nonce: numberToHex(nonce),
+          nonce: numberToHex(await getNounce()), // refetch just in case
           gas: numberToHex(parseInt(payload.gasLimit)),
           gasPrice: web3.utils.toHex(
             web3.utils.toWei(payload.gasPrice, 'gwei')
@@ -112,7 +115,6 @@ const Component = ({
         result.transactionSig
       );
       setResult({ transactionHash });
-      await updateNonce();
       await sleep(1000);
       updateWallet({ latestTxnHash: transactionHash });
     } catch (e) {
@@ -144,7 +146,9 @@ const Component = ({
         <Autocomplete
           id="to-autocomplete"
           options={accounts.filter(a => a !== from)}
+          value={to}
           onChange={(e, value) => setTo(value)}
+          onInputChange={e => setTo(e.target.value)}
           renderInput={params => (
             <TextField
               {...params}
@@ -244,7 +248,7 @@ const Component = ({
           type="button"
           variant="contained"
           color="secondary"
-          disabled={!result}
+          disabled={!result?.transactionSig}
           onClick={onBroadcastTransaction}
         >
           Broadcast
@@ -280,7 +284,7 @@ const Component = ({
 
 export default connect(state => {
   const {
-    wallet: { account, accounts, passphrase, network },
+    wallet: { account, accounts, passphrase, network, latestTxnHash },
   } = state;
   return {
     accounts,
@@ -288,5 +292,6 @@ export default connect(state => {
     passphrase,
     network,
     web3: web3Selector(state),
+    latestTxnHash,
   };
 }, mapDispatchToProps)(Component);
