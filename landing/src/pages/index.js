@@ -1,28 +1,28 @@
-import React from 'react'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Tooltip from '@material-ui/core/Tooltip'
-import ThemeProvider from '@material-ui/styles/ThemeProvider'
-import { createMuiTheme } from '@material-ui/core/styles'
-import LightIcon from '@material-ui/icons/WbIncandescent'
-import DarkIcon from '@material-ui/icons/Brightness2'
-import { Helmet } from 'react-helmet'
-import theme from '../utils/theme'
-import cache from '../utils/cache'
-import '../utils/style.scss'
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Tooltip from '@material-ui/core/Tooltip';
+import ThemeProvider from '@material-ui/styles/ThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
+import LightIcon from '@material-ui/icons/WbIncandescent';
+import DarkIcon from '@material-ui/icons/Brightness2';
+import { Helmet } from 'react-helmet';
+import theme from '../utils/theme';
+import cache from '../utils/cache';
+import '../utils/style.scss';
 
 const IndexPage = () => {
-  const [isDark, setIsDark] = React.useState(cache('isDark') !== '0')
+  const [isDark, setIsDark] = React.useState(cache('isDark') !== '0');
   const toggleTheme = () => {
-    const is = !isDark
-    setIsDark(is)
-    cache('isDark', is ? '1' : '0')
-  }
+    const is = !isDark;
+    setIsDark(is);
+    cache('isDark', is ? '1' : '0');
+  };
 
   React.useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark)
-  }, [isDark])
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
 
   return (
     <ThemeProvider theme={createMuiTheme(theme(isDark))}>
@@ -144,7 +144,7 @@ const IndexPage = () => {
         <div className="footer">&copy; 2020 Vb</div>
       </div>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;

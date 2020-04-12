@@ -14,7 +14,4 @@ server:
 dev:
 	@docker-compose -f docker-compose-dev.yml -p sc-dev up --build
 
-push:
-	@docker-compose -f docker-compose-build.yml -p sc-build push
-
 .PHONY: push dev server client run
