@@ -38,12 +38,12 @@ jobs:
         with:
           version: latest
       - name: Docker Login
-        run: docker login -u vbstreetz -p ${{ secrets.dockerhub }}
+        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
       - name: Run Buildx
         run: |
           docker buildx build \
             --platform linux/amd64,linux/arm/v7,linux/arm64 \
-            --tag vbstreetz/signatory-client:latest \
+            --tag ${{ secrets.DOCKER_HUB_USERNAME }}/signatory-client:latest \
             --file ./DockerfileRelease \
             --cache-to=type=local,dest=~/docker-cache \
             --push \

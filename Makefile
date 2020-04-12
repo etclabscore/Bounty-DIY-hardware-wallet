@@ -1,3 +1,10 @@
+run:
+	@cp .env.sample .env | xargs echo
+	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -s --all | xargs echo
+	@docker pull vbstreetz/signatory-client:latest
+	@docker rmi `docker images | grep "vbstreetz" | grep "<none>" | awk '{print $$3}'` | xargs echo
+	@docker-compose -f docker-compose-release.yml -p sc-release up -d
+
 client:
 	@yarn start
 
@@ -7,17 +14,7 @@ server:
 dev:
 	@docker-compose -f docker-compose-dev.yml -p sc-dev up --build
 
-build:
-	@docker-compose -f docker-compose-build.yml -p sc-build build
-
-run:
-	@cp .env.sample .env | xargs echo
-	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -s --all | xargs echo
-	@docker pull vbstreetz/signatory-client:latest
-	@docker rmi `docker images | grep "vbstreetz" | grep "<none>" | awk '{print $$3}'` | xargs echo
-	@docker-compose -f docker-compose-release.yml -p sc-release up -d
-
 push:
 	@docker-compose -f docker-compose-build.yml -p sc-build push
 
-.PHONY: push run build dev server client
+.PHONY: push dev server client run
