@@ -74,7 +74,7 @@ function Component({ importMnemonic }) {
           InputLabelProps={{
             shrink: true,
           }}
-          placeholder={'(Optional)'}
+          required
           fullWidth
         />
       </div>

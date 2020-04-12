@@ -7,6 +7,8 @@ export const { REACT_APP_IS_DEV: IS_DEV } = process.env;
 export const LOGIC_TYPES_KEYFILE = 'LOGIC_TYPES_KEYFILE';
 export const LOGIC_TYPES_MNEMONIC = 'LOGIC_TYPES_MNEMONIC';
 
+export const DEFAULT_SESSION_TIMEOUT_MINUTES = 15;
+
 export const CHAINS_LIST = [
   { id: 'etc', name: 'Ethereum Classic', tokenSymbol: 'ETC' },
   { id: 'eth', name: 'Ethereum', tokenSymbol: 'ETH' },
@@ -29,7 +31,7 @@ export const ETC_NETWORKS = [
   {
     name: 'mordor',
     providerUrl: 'https://www.ethercluster.com/mordor',
-    explorerBaseDomain: `https://mordor.etccoopexplorer.com/tx/`,
+    explorerBaseDomain: 'https://mordor.etccoopexplorer.com/tx/',
   },
 ].map(n => ({ ...n, id: `etc-${n.name}`, chain: 'etc' }));
 

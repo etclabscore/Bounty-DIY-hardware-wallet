@@ -51,12 +51,23 @@ function Component({ match, updateWallet, wallet, history }) {
 
   const onSubmit = async e => {
     e.preventDefault();
-    const { signatoryServerUrl, network, infuraApiKey } = formData;
+    const {
+      signatoryServerUrl,
+      network,
+      infuraApiKey,
+      sessionTimeoutMinutes,
+    } = formData;
     cache('signatoryServerUrl', formData.signatoryServerUrl);
     cache('chain', formData.chain);
     cache('network', formData.network);
     cache('infuraApiKey', formData.infuraApiKey);
-    updateWallet({ network, signatoryServerUrl, infuraApiKey });
+    cache('sessionTimeoutMinutes', formData.sessionTimeoutMinutes);
+    updateWallet({
+      network,
+      signatoryServerUrl,
+      infuraApiKey,
+      sessionTimeoutMinutes,
+    });
     history.push(backTo);
   };
 
@@ -150,6 +161,23 @@ function Component({ match, updateWallet, wallet, history }) {
               placeholder="Used to broadcast ETH transactions..."
               onChange={e =>
                 handleFormDataChange({ infuraApiKey: e.target.value })
+              }
+              fullWidth
+            />
+          </div>
+
+          <div className={classes.row}>
+            <TextField
+              id="sessionTimeoutMinutes"
+              label="Session Timeout (minutes)"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={formData.sessionTimeoutMinutes}
+              min={5}
+              onChange={e =>
+                handleFormDataChange({ sessionTimeoutMinutes: e.target.value })
               }
               fullWidth
             />

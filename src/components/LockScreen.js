@@ -12,6 +12,10 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
+import { stringToHex, numberToHex } from '@etclabscore/eserialize';
+import sl from 'utils/sl';
+import cache from 'utils/cache';
+import { web3Selector } from 'selectors/wallet';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({ show, updateWallet, logout }) {
+function Component({ show, account, updateWallet, logout, rpc, web3 }) {
   const classes = useStyles();
   const [passphrase, setPassphrase] = React.useState('');
 
@@ -34,7 +38,22 @@ function Component({ show, updateWallet, logout }) {
   };
 
   const handleSubmit = async () => {
-    updateWallet({ passphrase });
+    try {
+      // try sign a message with the pass
+      await rpc(
+        'sign',
+        stringToHex(Date.now().toString()),
+        account,
+        passphrase,
+        numberToHex(await web3.eth.getChainId())
+      );
+      // save pass and login
+      cache('passphrase', passphrase);
+      updateWallet({ passphrase });
+    } catch (e) {
+      console.log(e.message);
+      sl('error', 'Wrong password');
+    }
   };
 
   return (
@@ -53,7 +72,7 @@ function Component({ show, updateWallet, logout }) {
         <div className="flex flex--justify-center" style={{ marginBottom: 20 }}>
           <TextField
             id="amount"
-            label="Passphrase"
+            label="Password"
             type="password"
             InputLabelProps={{
               shrink: true,
@@ -76,8 +95,13 @@ function Component({ show, updateWallet, logout }) {
   );
 }
 
-export default connect(({ wallet: { account, passphrase } }) => {
+export default connect(state => {
+  const {
+    wallet: { account, passphrase },
+  } = state;
   return {
-    show: account && _.isNil(passphrase),
+    account,
+    show: Boolean(account && _.isNil(passphrase)),
+    web3: web3Selector(state),
   };
 }, mapDispatchToProps)(Component);

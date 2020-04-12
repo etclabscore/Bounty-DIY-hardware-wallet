@@ -10,6 +10,7 @@ import Loader from './Loader';
 import LockScreen from './LockScreen';
 import { Router } from 'react-router-dom';
 import { history } from 'store';
+import cache from 'utils/cache';
 import themeSelector, { isDarkSelector } from 'selectors/theme';
 import { CssBaseline } from '@material-ui/core';
 
@@ -17,7 +18,15 @@ const useStyles = makeStyles(theme => ({
   error: { padding: 50, color: DANGER_COLOR },
 }));
 
-function Component({ error, isLoaded, theme, isDark, logout, timeout }) {
+function Component({
+  error,
+  isLoaded,
+  theme,
+  isDark,
+  logout,
+  updateWallet,
+  sessionTimeoutMinutes,
+}) {
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -39,9 +48,12 @@ function Component({ error, isLoaded, theme, isDark, logout, timeout }) {
         <LockScreen />
         <IdleTimer
           element={document}
-          onIdle={logout}
+          onIdle={() => {
+            updateWallet({ passphrase: null });
+            cache('passphrase', null);
+          }}
           debounce={250}
-          timeout={timeout}
+          timeout={1000 * 60 * sessionTimeoutMinutes}
         />
       </div>
     );
@@ -66,13 +78,13 @@ export default connect(state => {
     console.log(error);
     err = error.message || 'Error Loading Application!';
   }
-
+  const { sessionTimeoutMinutes } = wallet;
   return {
     isLoaded,
     user,
     error: err,
     theme: themeSelector(state),
     isDark: isDarkSelector(state),
-    timeout: wallet.timeout,
+    sessionTimeoutMinutes,
   };
 }, mapDispatchToProps)(Component);

@@ -1,5 +1,9 @@
 import cache from 'utils/cache';
-import { DEFAULT_SIGNATORY_SERVER_URL, DEFAULT_NETWORK } from 'config';
+import {
+  DEFAULT_SIGNATORY_SERVER_URL,
+  DEFAULT_NETWORK,
+  DEFAULT_SESSION_TIMEOUT_MINUTES,
+} from 'config';
 
 export default Base =>
   class extends Base {
@@ -21,7 +25,9 @@ export default Base =>
         this.state.wallet.network = cache('network') || DEFAULT_NETWORK;
         this.state.wallet.infuraApiKey = cache('infuraApiKey');
 
-        this.state.wallet.timeout = 1000 * 60 * 15;
+        this.state.wallet.sessionTimeoutMinutes =
+          parseInt(cache('sessionTimeoutMinutes')) ||
+          DEFAULT_SESSION_TIMEOUT_MINUTES;
       } catch (error) {
         console.log(error);
       }

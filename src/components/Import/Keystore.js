@@ -46,7 +46,7 @@ function Component({ importKeyfile, importKeystorage }) {
           variant="contained"
           fullWidth
           color="secondary"
-          onClick={async() => {
+          onClick={async () => {
             setKeyfile(await importKeyfile());
           }}
         >
@@ -62,7 +62,7 @@ function Component({ importKeyfile, importKeystorage }) {
           InputLabelProps={{
             shrink: true,
           }}
-          placeholder={'(Optional)'}
+          required
           fullWidth
         />
       </div>
