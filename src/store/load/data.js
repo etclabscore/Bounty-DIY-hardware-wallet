@@ -20,6 +20,8 @@ export default Base =>
           cache('signatoryServerUrl') || DEFAULT_SIGNATORY_SERVER_URL;
         this.state.wallet.network = cache('network') || DEFAULT_NETWORK;
         this.state.wallet.infuraApiKey = cache('infuraApiKey');
+
+        this.state.wallet.timeout = 1000 * 60 * 15;
       } catch (error) {
         console.log(error);
       }

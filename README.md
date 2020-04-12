@@ -21,13 +21,11 @@ It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCryp
 
 1. Setup [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-2. Copy `.env.sample` to `.env` and configure appropriately.
-
-3. Clone this repo and run:
+2. Clone this repo and run:
 
    \$ make run
 
-4. Visit app at http://localhost:4444
+3. Visit app at http://localhost:4444
 
 ## Video Demo
 

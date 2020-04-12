@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import * as mapDispatchToProps from 'actions';
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import { DANGER_COLOR } from 'config';
+import IdleTimer from 'react-idle-timer';
 import Header from './Header';
 import Home from './Home';
 import Loader from './Loader';
+import LockScreen from './LockScreen';
 import { Router } from 'react-router-dom';
 import { history } from 'store';
 import themeSelector, { isDarkSelector } from 'selectors/theme';
@@ -15,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   error: { padding: 50, color: DANGER_COLOR },
 }));
 
-function Component({ error, isLoaded, theme, isDark }) {
+function Component({ error, isLoaded, theme, isDark, logout, timeout }) {
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -34,6 +36,13 @@ function Component({ error, isLoaded, theme, isDark }) {
       <div className="flex-grow">
         <Header />
         <Home />
+        <LockScreen />
+        <IdleTimer
+          element={document}
+          onIdle={logout}
+          debounce={250}
+          timeout={timeout}
+        />
       </div>
     );
   } else {
@@ -50,7 +59,7 @@ function Component({ error, isLoaded, theme, isDark }) {
 }
 
 export default connect(state => {
-  const { app, user } = state;
+  const { app, user, wallet } = state;
   const { isLoaded, error } = app;
   let err;
   if (error) {
@@ -64,5 +73,6 @@ export default connect(state => {
     error: err,
     theme: themeSelector(state),
     isDark: isDarkSelector(state),
+    timeout: wallet.timeout,
   };
 }, mapDispatchToProps)(Component);
