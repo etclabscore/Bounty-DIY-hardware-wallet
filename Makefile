@@ -1,6 +1,6 @@
 run:
 	@cp .env.sample .env | xargs echo
-	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -s --all | xargs echo
+	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -v | xargs echo
 	@docker pull vbstreetz/signatory-client:latest
 	@docker rmi `docker images | grep "vbstreetz" | grep "<none>" | awk '{print $$3}'` | xargs echo
 	@docker-compose -f docker-compose-release.yml -p sc-release up -d

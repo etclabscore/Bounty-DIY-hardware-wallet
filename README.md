@@ -93,7 +93,7 @@ Bundle the frontend app to `build/` with:
   yarn build
 ```
 
-Then run `./buildx.sh my-image-name:tag` to build multi-arch docker images which you can then push to a private docker registry or to [Docker Hub](https://hub.docker.com/)
+Then run `./buildx.sh my-image-name:tag` to build multi-arch docker images which you can then push to a private docker registry or to [Docker Hub](https://hub.docker.com/).
 
 ## Documentation
 
