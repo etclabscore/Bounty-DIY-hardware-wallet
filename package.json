@@ -1,6 +1,6 @@
 {
   "name": "signatory-client",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
     "@etclabscore/eserialize": "^1.0.2",
