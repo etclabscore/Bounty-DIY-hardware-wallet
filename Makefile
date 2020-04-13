@@ -1,5 +1,5 @@
 run:
-	@cp .env.sample .env | xargs echo
+	@cp -n .env.sample .env | xargs echo
 	@docker-compose -f docker-compose-release.yml -p sc-release rm -f -v | xargs echo
 	@docker pull vbstreetz/signatory-client:latest
 	@docker rmi `docker images | grep "vbstreetz" | grep "<none>" | awk '{print $$3}'` | xargs echo
