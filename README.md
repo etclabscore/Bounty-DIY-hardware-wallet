@@ -1,52 +1,100 @@
-# Pristine
+![](https://siasky.net/PAMGM9PeehQQWOYCCC7B8ux2go5FgiMIu0gxvSO-0v770A)
 
-Pristine is an open source repository in its original condition.
+## The Problem
 
-There are a lack of repositories to start from to build community driven open source projects. Pristine is a starting point, it follows a Documentation Driven Development approach, and can be used as a resource to augment existing documentation.
+Need for a Do It Yourself Ethereum (Hardware) Wallet.
 
-## How to use Pristine in your project
+## The Goal
 
-There are 2 options for using pristine with your project. 
-1. Fork this repo as the start of your own, OR
-2. [follow these instructions](https://thoughts.t37.net/merging-2-different-git-repositories-without-losing-your-history-de7a06bba804) to use it on an existing repository.
+An Ethereum Wallet GUI powered by [Signatory Server](https://signatory.dev), that:
 
-## Documentation Driven Development
+- [x] Creates accounts from imported mnemonic phrases or keystore files
+- [x] Allows generation of mnemonic phrases and keystore files
+- [x] Provides ability to sign and verify messages
+- [x] Provides ability to sign and broadcast transactions
+- [ ] Interact with smart contracts
+- [ ] Send ERC20 tokens
 
-There are many ways to drive open source development. Documenting the problem in the README gives a middle ground between technical and non-technical specifications. This allows organizing solutions to this challenge around community and documentation.
+It is greatly inspired by [MyCrypto Wallet](https://github.com/MyCryptoHQ/MyCrypto), an electronjs client for generating ether wallets, handling ERC-20 tokens, and interacting with the blockchain more easily.
 
-> [...] a beautifully crafted library with no documentation is also damn near worthless. If your software solves the wrong problem or nobody can figure out how to use it, there’s something very bad going on.
+## Getting started
 
-- [Readme Driven Development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) by Tom Preson-Werner
+1. Setup [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-### Conventions and Specifications 
+2. Clone this repo and run:
 
-Using conventions, documentation and specifications make it easier to:
-- communicate the problem you are solving
-- ease onboarding
-- build and use composable tools
-- promote open source contribution and engagement
-- promote issue and feature discussion on Github itself
+```
+    $ make
+```
 
-#### Resources
+3. Visit app at http://localhost:4444
 
-- [opensource.guide](https://opensource.guide/)
-- [Github community profiles for public repositories](https://help.github.com/articles/about-community-profiles-for-public-repositories/)
-- [Readme Driven Development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html)
-- [pengwynn/flint](https://github.com/pengwynn/flint)
-- [Working Backwards](https://www.allthingsdistributed.com/2006/11/working_backwards.html)
-- [Literate programming](https://en.wikipedia.org/wiki/Literate_programming)
-- [Hammock Driven Development](https://www.youtube.com/watch?v=f84n5oFoZBc)
-- [Inversion and The Power of Avoiding Stupidity](https://fs.blog/2013/10/inversion/)
-- [choosealicense.com](http://choosealicense.com)
-- [The Documentation Compendium](https://github.com/kylelobo/The-Documentation-Compendium)
+## Upgrading
 
-## Getting Started
+Rerun `make run` to use the latest updates. This will:
 
-To get started, [fork](https://help.github.com/articles/fork-a-repo/) or [duplicate](https://help.github.com/articles/duplicating-a-repository/) the repository. Then edit this file and delete everything above this line.
+- Pull any fresh docker image layers
+- Remove old docker image layers
+- Recreate the docker containers
 
----
+This preserves any previously imported accounts which are stored in the local `data` directory.
 
-### Contributing
+## Video Demo
+
+https://youtu.be/g6LZ1osKw8k
+
+## Contributing
+
+### Building from source
+
+The project is mainly composed of a React frontend that interfaces with an instance of the Signatory Server. To get started,
+
+1. Ensure you have the following pre-requisites:
+
+- NodeJS 10.x
+- Yarn
+
+2. Install the node dependencies
+
+```
+    yarn
+```
+
+3. Start the Signatory server
+
+```
+    yarn server
+```
+
+This starts the server on port 1999.
+
+4. Start the frontend builder
+
+```
+    yarn start
+```
+
+This starts a package builder that exposes the frontend on port 4444. It also watches for file changes, builds a new bundle and reloads the current tab to view the change.
+
+### Features
+
+The frontend app is a Reactjs app that utilizes the following main packages:
+
+- Redux for the global store
+- MaterialUI for consistent material design UX
+- OpenRPC for communication with the Signatory Server
+- ReactIdleTimer for session timeout management
+
+### Build & Release
+
+Bundle the frontend app to `build/` with:
+
+```
+  yarn build
+```
+
+Then run `./buildx.sh my-image-name:tag` to build multi-arch docker images which you can then push to a private docker registry or to [Docker Hub](https://hub.docker.com/).
+
+## Documentation
 
 How to contribute, build and release are outlined in [CONTRIBUTING.md](CONTRIBUTING.md), [BUILDING.md](BUILDING.md) and [RELEASING.md](RELEASING.md) respectively. Commits in this repository follow the [CONVENTIONAL_COMMITS.md](CONVENTIONAL_COMMITS.md) specification.
-

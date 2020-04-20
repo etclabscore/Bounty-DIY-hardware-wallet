@@ -1,0 +1,25 @@
+version: '2.1'
+
+services:
+  client:
+    build:
+      context: ./
+      dockerfile: DockerfileDev
+    image: vbstreetz/signatory-client:dev
+    command: yarn start
+    environment:
+      REACT_APP_IS_DEV: 1
+      REACT_APP_INFURA_API_KEY: '${REACT_APP_INFURA_API_KEY}'
+    volumes:
+      - ./:/tmp
+      - /tmp/node_modules
+    ports:
+      - '${PORT}:4444'
+
+  server:
+    image: vbstreetz/signatory-client:dev
+    command: yarn server
+    ports:
+      - 1999:1999
+    volumes:
+      - "./data:/data"
